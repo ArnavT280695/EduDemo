@@ -4,8 +4,81 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EduShield">
 <meta name="theme-color" content="#0A5A41">
-<title>EduShield — Schools</title>
+<title>EduShield</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--sf:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+html,body{height:100%}
+body{font-family:var(--sf);background:#0A5A41;color:#fff;height:100%;display:flex;flex-direction:column;overflow:hidden}
+#topbar{flex:none;height:46px;display:none;align-items:center;gap:10px;padding:0 8px 0 6px;background:#0A5A41;border-bottom:1px solid rgba(255,255,255,.1);z-index:7}
+#topbar.on{display:flex}
+#topbar .bk{display:flex;align-items:center;gap:3px;border:0;background:transparent;color:#fff;font-family:var(--sf);font-size:15px;font-weight:600;padding:8px 10px;cursor:pointer;border-radius:10px}
+#topbar .bk:active{background:rgba(255,255,255,.12)}
+#topbar .bk svg{width:20px;height:20px}
+#topbar .tt{font-size:13px;font-weight:700;opacity:.9}
+#topbar .sp{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;opacity:.7;font-weight:600;padding-right:8px}
+#topbar .sp svg{width:15px;height:15px}
+#stage{flex:1;position:relative;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#161b18}
+iframe.on{display:block}
+/* onboarding */
+#onboard{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;background:#0A5A41;background-image:radial-gradient(circle at 25% 8%,#0E7A59,#0A5A41 58%,#063826);padding:max(20px,env(safe-area-inset-top)) 0 max(22px,env(safe-area-inset-bottom))}
+#onboard.off{display:none}
+.ob-top{display:flex;justify-content:space-between;align-items:center;padding:4px 20px}
+.ob-logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:15px}.ob-logo svg{width:20px;height:20px}
+.ob-skip{background:transparent;border:0;color:rgba(255,255,255,.7);font-family:var(--sf);font-size:14px;font-weight:600;cursor:pointer;padding:8px}
+.vp{flex:1;overflow:hidden;min-height:0}
+.track{display:flex;height:100%;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.slide{flex:0 0 100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 34px}
+.illus{width:190px;height:190px;margin-bottom:20px;animation:pop .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.slide h2{font-size:25px;font-weight:800;letter-spacing:-.4px;line-height:1.15}
+.slide p{opacity:.85;font-size:15px;line-height:1.5;margin-top:11px;max-width:300px}
+.ob-bot{padding:16px 24px 4px;display:flex;flex-direction:column;gap:16px;align-items:center}
+.dots{display:flex;gap:7px}
+.dot2{width:7px;height:7px;border-radius:9px;background:rgba(255,255,255,.3);transition:.35s}
+.dot2.on{width:22px;background:#E0A93B}
+.ob-next{width:100%;max-width:340px;border:0;border-radius:16px;padding:16px;background:#fff;color:#0A5A41;font-family:var(--sf);font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.ob-next:active{transform:scale(.98)}
+/* launcher */
+#launcher{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(28px,env(safe-area-inset-top)) 24px max(28px,env(safe-area-inset-bottom));background:#0A5A41;background-image:radial-gradient(circle at 20% 0%,#0E7A59,#0A5A41 55%,#063826);overflow:auto;z-index:6}
+#launcher.off{display:none}
+.glow{position:absolute;top:7%;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(224,169,59,.3),transparent 70%);filter:blur(26px);animation:breathe 4s ease-in-out infinite;pointer-events:none}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:.95}}
+.wrap{width:100%;max-width:420px;position:relative;z-index:1}
+.brand{text-align:center;animation:rise .7s cubic-bezier(.22,1,.36,1) both}
+.brand svg{width:70px;height:70px}
+.brand h1{font-size:32px;font-weight:800;letter-spacing:-.6px;margin-top:12px}
+.brand p{opacity:.82;font-size:15px;margin-top:8px;line-height:1.45}
+.cards{margin-top:34px;display:flex;flex-direction:column;gap:14px}
+.appcard{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:18px;color:#fff;cursor:pointer;transition:transform .14s,background .2s;animation:rise .7s cubic-bezier(.22,1,.36,1) both}
+.appcard:active{transform:scale(.98)}.appcard.a2{animation-delay:.1s}
+.appcard .ic{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;flex:none;font-size:26px}
+.appcard .ic.p{background:rgba(255,255,255,.16)}.appcard .ic.s{background:linear-gradient(135deg,#E0A93B,#C98A1E)}
+.appcard .tx{flex:1}.appcard .tx b{font-size:18px;font-weight:700;display:block}.appcard .tx span{opacity:.78;font-size:13px}
+.appcard .arr{opacity:.7}.appcard .arr svg{width:22px;height:22px}
+.hint{margin-top:24px;text-align:center;font-size:12.5px;opacity:.72;line-height:1.6;animation:rise .7s .2s cubic-bezier(.22,1,.36,1) both}
+.foot{margin-top:16px;text-align:center;font-size:11px;opacity:.5}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <button class="bk" onclick="home()"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Home</button>
+  <span class="tt" id="tt">EduShield</span>
+  <span class="sp"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#E0A93B"/><path d="M9 12l2 2 4-4" stroke="#0A5A41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prototype</span>
+</div>
+<div id="stage">
+  <iframe id="frP" srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&quot;>
+<meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;>
+<meta name=&quot;theme-color&quot; content=&quot;#0A5A41&quot;>
+<title>EduShield — Parent</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -14,7 +87,7 @@
   --gold:#C98A1E;--gold-soft:#E0A93B;--gold-tint:#FBF0D8;
   --danger:#BC4F39;--danger-tint:#F6E5E0;--info:#2D6E8E;--info-tint:#E2EEF3;
   --ease:cubic-bezier(.22,1,.36,1);
-  --sf:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sf:-apple-system,BlinkMacSystemFont,&quot;SF Pro Text&quot;,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif;
 }
 html,body{height:100%}
 body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(circle at 20% 0%,#2a3a33,#161b18 55%,#0f1310);color:var(--ink);display:flex;flex-direction:column;align-items:center;min-height:100%;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -40,9 +113,9 @@ body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(c
 @keyframes vin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .view::-webkit-scrollbar{display:none}
 .pad{padding:8px 18px 132px}
-.tabbar{flex:none;height:84px;background:rgba(255,255,255,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);display:flex;padding:8px 4px 24px;z-index:80}
+.tabbar{flex:none;height:84px;background:rgba(255,255,255,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);display:flex;padding:8px 6px 24px;z-index:80}
 .tab{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--faint);font-family:var(--sf);padding-top:4px}
-.tab svg{width:24px;height:24px;stroke-width:1.9}
+.tab svg{width:25px;height:25px;stroke-width:1.9}
 .tab span{font-size:10px;font-weight:600}
 .tab.on{color:var(--primary)}
 .lt{padding:4px 0 14px}.lt h1{font-size:29px;font-weight:800;letter-spacing:-.6px}.lt p{color:var(--muted);font-size:13.5px;margin-top:2px}
@@ -53,7 +126,6 @@ body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(c
 .btn:active{transform:scale(.975)}
 .btn.gold{background:linear-gradient(135deg,#E0A93B,#C98A1E);box-shadow:0 8px 20px -8px rgba(201,138,30,.6)}
 .btn.ghost{background:var(--primary-tint);color:var(--primary-deep);box-shadow:none}
-.btn.dark{background:var(--ink);box-shadow:none}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:99px}
 .chip.green{background:var(--primary-tint);color:var(--primary-deep)}.chip.gold{background:var(--gold-tint);color:var(--gold)}
 .chip.red{background:var(--danger-tint);color:var(--danger)}.chip.blue{background:var(--info-tint);color:var(--info)}.chip.gray{background:#EEF1EE;color:var(--muted)}
@@ -63,17 +135,486 @@ body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(c
 .nav .back{width:38px;height:38px;border-radius:99px;border:0;background:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
 .nav .back svg{width:18px;height:18px}.nav .ttl{font-size:17px;font-weight:700}
 .group{background:#fff;border-radius:18px;overflow:hidden}
-.li{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.li{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer}
 .li:last-child{border-bottom:0}
 .li .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}.li .ic svg{width:19px;height:19px}
 .li .tx{flex:1;min-width:0}.li .tx b{font-size:14.5px;font-weight:600;display:block}.li .tx small{color:var(--faint);font-size:12px}
+.li .ch{color:var(--faint)}.li .ch svg{width:16px;height:16px}
 .hero{border-radius:26px;padding:22px;color:#fff;position:relative;overflow:hidden;background:linear-gradient(150deg,#0E7A59,#0A5A41 70%,#073d2c)}
-.hero:after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 90% 10%,rgba(224,169,59,.28),transparent 45%);pointer-events:none}
+.hero:after{content:&quot;&quot;;position:absolute;inset:0;background-image:radial-gradient(circle at 90% 10%,rgba(224,169,59,.28),transparent 45%);pointer-events:none}
 .hero .wm{position:absolute;right:-22px;bottom:-30px;width:160px;opacity:.12}
 .amt{font-size:38px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
 .av{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#0E7A59,#0A5A41);color:#fff;display:grid;place-items:center;font-weight:700;font-size:17px;flex:none}
 .av.gold{background:linear-gradient(135deg,#E0A93B,#C98A1E)}.av.sm{width:38px;height:38px;border-radius:11px;font-size:14px}
 .iseg{display:flex;background:#EAEDEA;border-radius:12px;padding:3px;margin-bottom:12px}
+.iseg button{flex:1;border:0;background:transparent;font-family:var(--sf);font-size:13px;font-weight:600;color:var(--muted);padding:9px;border-radius:9px;cursor:pointer}
+.iseg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.banner{border-radius:18px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}.banner svg{width:22px;height:22px;flex:none;margin-top:1px}
+#splash{position:absolute;inset:0;z-index:150;background:linear-gradient(160deg,#0E7A59,#0A5A41 60%,#063826);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .6s,visibility .6s}
+#splash.gone{opacity:0;visibility:hidden}
+#splash .logo{width:92px;height:92px;animation:pop .8s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:scale(.6) translateY(10px)}to{opacity:1;transform:none}}
+#splash .wm{font-size:30px;font-weight:800;margin-top:18px;animation:rise .7s .25s var(--ease) both}
+#splash .tag{font-size:14px;opacity:.85;margin-top:8px;animation:rise .7s .42s var(--ease) both}
+#splash .glow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(224,169,59,.35),transparent 70%);filter:blur(20px);animation:breathe 3s ease-in-out infinite}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:.9}}
+.otpwrap{display:flex;gap:10px;justify-content:space-between;margin:18px 0}
+.otp{width:48px;height:58px;border-radius:14px;background:#fff;border:1.5px solid var(--line);display:grid;place-items:center;font-size:24px;font-weight:700;transition:.2s}
+.otp.fill{border-color:var(--primary);background:var(--primary-tint)}
+.scrim{position:absolute;inset:0;background:rgba(8,18,15,.45);opacity:0;visibility:hidden;transition:.3s;z-index:90;backdrop-filter:blur(2px)}
+.scrim.on{opacity:1;visibility:visible}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg);border-radius:28px 28px 0 0;padding:8px 18px 22px;transform:translateY(110%);transition:transform .42s var(--ease);z-index:95;max-height:90%;overflow-y:auto}
+.sheet.on{transform:none}.sheet .grab{width:38px;height:5px;border-radius:9px;background:#D5DAD5;margin:6px auto 14px}.sheet::-webkit-scrollbar{display:none}
+.payopt{display:flex;align-items:center;gap:13px;padding:14px;background:#fff;border-radius:16px;margin-bottom:10px;cursor:pointer;border:1.5px solid transparent;transition:.18s}
+.payopt.sel{border-color:var(--primary);background:var(--primary-tint)}
+.payopt .logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-weight:800;color:#fff;font-size:13px;flex:none}
+.payopt b{font-size:14.5px;font-weight:600}.payopt small{color:var(--faint);font-size:12px}
+.payopt .radio{width:21px;height:21px;border-radius:99px;border:2px solid #CDD4CE;flex:none;display:grid;place-items:center}
+.payopt.sel .radio{border-color:var(--primary)}.payopt.sel .radio:after{content:&quot;&quot;;width:11px;height:11px;border-radius:99px;background:var(--primary)}
+#processing{position:absolute;inset:0;background:rgba(235,238,234,.96);z-index:108;display:none;flex-direction:column;align-items:center;justify-content:center}
+#processing.on{display:flex}
+.spin{width:54px;height:54px;border-radius:99px;border:5px solid var(--primary-tint);border-top-color:var(--primary);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#paySuccess .ok{width:104px;height:104px;border-radius:99px;background:var(--primary-tint);display:grid;place-items:center;margin:24px auto 0;animation:pop .5s var(--ease) both}
+#paySuccess .ok svg{width:52px;height:52px}
+.checkpath{stroke-dasharray:48;stroke-dashoffset:48;animation:draw .5s .25s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.tl{position:relative;padding-left:28px}.tl:before{content:&quot;&quot;;position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .step{position:relative;padding-bottom:18px}.tl .step:last-child{padding-bottom:0}
+.tl .step .node{position:absolute;left:-24px;top:2px;width:20px;height:20px;border-radius:99px;background:#fff;border:2px solid var(--line);display:grid;place-items:center}
+.tl .step.done .node{background:var(--primary);border-color:var(--primary)}.tl .step.done .node svg{width:11px;height:11px;color:#fff}
+.tl .step.active .node{border-color:var(--gold);background:var(--gold-tint)}
+.tl .step b{font-size:14px;font-weight:600;display:block}.tl .step small{color:var(--faint);font-size:12px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prod{background:#fff;border-radius:18px;overflow:hidden}
+.prod .ph{height:84px;display:grid;place-items:center;font-size:32px}
+.prod .pb{padding:10px 12px 12px}.prod .pb b{font-size:13px;font-weight:600;display:block;line-height:1.25}.prod .pb .pr{font-size:14px;font-weight:800;margin-top:3px;color:var(--primary-deep)}
+.addbtn{margin-top:8px;width:100%;border:0;background:var(--primary-tint);color:var(--primary-deep);font-weight:700;font-family:var(--sf);font-size:12.5px;padding:8px;border-radius:10px;cursor:pointer;transition:.15s}
+.addbtn.added{background:var(--primary);color:#fff}
+.cartbar{position:absolute;left:14px;right:14px;bottom:98px;background:var(--ink);color:#fff;border-radius:16px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;z-index:40;transform:translateY(140%);transition:transform .35s var(--ease);box-shadow:0 14px 30px -10px rgba(0,0,0,.5)}
+.cartbar.on{transform:none}
+.cartbar b{font-size:15px}.cartbar button{border:0;background:#fff;color:var(--ink);font-weight:700;font-family:var(--sf);font-size:13.5px;padding:9px 16px;border-radius:11px;cursor:pointer}
+.statbox{background:#fff;border-radius:18px;padding:15px}.statbox .k{font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--faint);text-transform:uppercase}.statbox .v{font-size:23px;font-weight:800;letter-spacing:-.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+.slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:9px;background:var(--line);outline:none;margin:14px 0 6px}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:99px;background:#fff;border:3px solid var(--primary);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.fade{opacity:0;transform:translateY(10px);animation:fu .5s var(--ease) forwards}@keyframes fu{to{opacity:1;transform:none}}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}.d4{animation-delay:.26s}.d5{animation-delay:.33s}
+@media (max-width:440px){body{display:block;background:var(--bg)}.demo-bar{display:none}.stage{padding:0}.device{width:100vw;height:100vh;max-height:none;border-radius:0;padding:0;box-shadow:none}.screen{border-radius:0}.island,.statusbar{display:none}.app{padding-top:env(safe-area-inset-top,0px)}}
+</style>
+<style>.demo-bar{display:none!important}@media(max-width:440px){.device{height:100vh!important}}</style></head>
+<body>
+<div class=&quot;demo-bar&quot;>
+  <div class=&quot;demo-brand&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#E0A93B&quot;/><path d=&quot;M9 12l2 2 4-4&quot; stroke=&quot;#0A5A41&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>EduShield</div>
+  <div class=&quot;seg&quot;><button class=&quot;on&quot; style=&quot;cursor:default&quot;>Parent App · Prototype</button></div>
+  <button class=&quot;demo-reset&quot; onclick=&quot;restart()&quot; title=&quot;Restart&quot;>↻</button>
+</div>
+
+<div class=&quot;stage&quot;><div class=&quot;device&quot;>
+  <div class=&quot;screen&quot;>
+    <div id=&quot;splash&quot;><div class=&quot;glow&quot;></div>
+      <svg class=&quot;logo&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#fff&quot;/><path d=&quot;M9 12l2 2 4-4&quot; stroke=&quot;#0A5A41&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>
+      <div class=&quot;wm&quot;>EduShield</div><div class=&quot;tag&quot;>Every school day, protected.</div>
+    </div>
+
+    <div class=&quot;island&quot;></div>
+    <div class=&quot;statusbar&quot;><div>9:41</div><div class=&quot;sb-r&quot;>
+      <svg viewBox=&quot;0 0 18 13&quot; fill=&quot;currentColor&quot;><rect x=&quot;0&quot; y=&quot;8&quot; width=&quot;3&quot; height=&quot;5&quot; rx=&quot;1&quot;/><rect x=&quot;5&quot; y=&quot;5&quot; width=&quot;3&quot; height=&quot;8&quot; rx=&quot;1&quot;/><rect x=&quot;10&quot; y=&quot;2.5&quot; width=&quot;3&quot; height=&quot;10.5&quot; rx=&quot;1&quot;/><rect x=&quot;15&quot; y=&quot;0&quot; width=&quot;3&quot; height=&quot;13&quot; rx=&quot;1&quot;/></svg>
+      <svg viewBox=&quot;0 0 18 13&quot; fill=&quot;currentColor&quot;><path d=&quot;M9 2.5c2.5 0 4.8 1 6.5 2.6l-1.4 1.4A7 7 0 0 0 9 4.5 7 7 0 0 0 3.9 6.5L2.5 5.1A9.4 9.4 0 0 1 9 2.5zm0 4a5 5 0 0 1 3.5 1.4l-1.4 1.4A3 3 0 0 0 9 8.5a3 3 0 0 0-2.1.8L5.5 7.9A5 5 0 0 1 9 6.5z&quot;/></svg>
+      <svg viewBox=&quot;0 0 26 13&quot; fill=&quot;none&quot;><rect x=&quot;1&quot; y=&quot;1&quot; width=&quot;21&quot; height=&quot;11&quot; rx=&quot;3&quot; stroke=&quot;currentColor&quot; stroke-opacity=&quot;.4&quot;/><rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;16&quot; height=&quot;7&quot; rx=&quot;1.5&quot; fill=&quot;currentColor&quot;/><rect x=&quot;23&quot; y=&quot;4.5&quot; width=&quot;2&quot; height=&quot;4&quot; rx=&quot;1&quot; fill=&quot;currentColor&quot; fill-opacity=&quot;.5&quot;/></svg>
+    </div></div>
+
+    <div class=&quot;app&quot; id=&quot;parentApp&quot;>
+      <div class=&quot;viewport&quot; id=&quot;pViewport&quot;>
+
+        <div class=&quot;view active&quot; data-view=&quot;p-login&quot;>
+          <div class=&quot;pad&quot; style=&quot;display:flex;flex-direction:column;height:100%;padding-top:24px&quot;>
+            <div style=&quot;text-align:center&quot;>
+              <svg style=&quot;width:62px;height:62px&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#0E7A59&quot;/><path d=&quot;M9 12l2 2 4-4&quot; stroke=&quot;#fff&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>
+              <h1 style=&quot;font-size:25px;font-weight:800;margin-top:14px&quot;>Welcome to EduShield</h1>
+              <p class=&quot;muted&quot; style=&quot;font-size:14px;margin-top:6px;line-height:1.4&quot;>Pay school fees, stay updated, and keep<br>your child's education protected.</p>
+            </div>
+            <div style=&quot;margin-top:30px&quot;>
+              <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:8px&quot;>Mobile number</div>
+              <div class=&quot;card&quot; style=&quot;padding:0;display:flex;align-items:center&quot;>
+                <div style=&quot;padding:16px 14px;font-weight:700;border-right:1px solid var(--line);color:var(--muted)&quot;>🇮🇳 +91</div>
+                <input maxlength=&quot;11&quot; value=&quot;98765 43210&quot; style=&quot;flex:1;border:0;font-size:17px;font-family:var(--sf);padding:16px 14px;background:transparent;font-weight:600;letter-spacing:.5px&quot; readonly>
+              </div>
+            </div>
+            <div style=&quot;margin-top:auto;padding-bottom:8px&quot;>
+              <button class=&quot;btn&quot; onclick=&quot;goView('p-otp')&quot;>Get OTP</button>
+              <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:14px;line-height:1.5&quot;>By continuing you agree to EduShield's Terms &amp;<br>Privacy. Prototype build — no real data used.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-otp&quot;>
+          <div class=&quot;nav&quot;><button class=&quot;back&quot; onclick=&quot;goView('p-login')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M15 6l-6 6 6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></button></div>
+          <div class=&quot;pad&quot; style=&quot;padding-top:8px&quot;>
+            <h1 style=&quot;font-size:25px;font-weight:800&quot;>Enter OTP</h1>
+            <p class=&quot;muted&quot; style=&quot;font-size:14px;margin-top:6px&quot;>Sent to +91 98765 43210</p>
+            <div class=&quot;otpwrap&quot; id=&quot;otpWrap&quot;><div class=&quot;otp&quot;></div><div class=&quot;otp&quot;></div><div class=&quot;otp&quot;></div><div class=&quot;otp&quot;></div></div>
+            <p class=&quot;faint&quot; style=&quot;font-size:12.5px;text-align:center&quot;>Auto-reading OTP… <span style=&quot;color:var(--primary);font-weight:600&quot;>demo</span></p>
+            <div style=&quot;margin-top:22px&quot;><button class=&quot;btn&quot; onclick=&quot;goHome()&quot;>Verify &amp; Continue</button></div>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-home&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;row fade d1&quot; style=&quot;justify-content:space-between;margin-bottom:16px&quot;>
+              <div><p class=&quot;faint&quot; style=&quot;font-size:13px&quot;>Good morning</p><h1 style=&quot;font-size:24px;font-weight:800&quot;>Anjali Sharma</h1></div>
+              <div class=&quot;av gold&quot; style=&quot;cursor:pointer&quot; onclick=&quot;tabTo('p-profile')&quot;>AS</div>
+            </div>
+            <div class=&quot;hero fade d2&quot;>
+              <svg class=&quot;wm&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#fff&quot;/></svg>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;position:relative&quot;>
+                <div class=&quot;row&quot; style=&quot;gap:12px&quot;><div class=&quot;av&quot; style=&quot;background:rgba(255,255,255,.16)&quot;>AS</div>
+                  <div><b style=&quot;font-size:16px&quot;>Aarav Sharma</b><div style=&quot;opacity:.82;font-size:12.5px;margin-top:2px&quot;>Class 5-B · Greenwood Intl.</div></div></div>
+                <span class=&quot;chip&quot; style=&quot;background:rgba(224,169,59,.22);color:#FBE6BC&quot;><span class=&quot;dot&quot;></span>Protected</span>
+              </div>
+              <div style=&quot;height:1px;background:rgba(255,255,255,.15);margin:16px 0&quot;></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;align-items:flex-end;position:relative&quot;>
+                <div><div style=&quot;opacity:.78;font-size:12.5px&quot;>Next fee due · June</div>
+                  <div class=&quot;amt&quot; data-count=&quot;6400&quot; style=&quot;margin-top:2px&quot;>₹0</div>
+                  <div style=&quot;opacity:.82;font-size:12.5px;margin-top:2px&quot;>Due 10 Jun · <span style=&quot;color:#FBE6BC;font-weight:600&quot;>in 4 days</span></div></div>
+                <button onclick=&quot;openPay()&quot; style=&quot;border:0;background:#fff;color:#0A5A41;font-weight:700;font-family:var(--sf);font-size:14px;padding:12px 20px;border-radius:14px;cursor:pointer&quot;>Pay now</button>
+              </div>
+            </div>
+            <div class=&quot;card fade d3&quot; style=&quot;margin-top:16px;background:linear-gradient(135deg,#FBF0D8,#fff)&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;>
+                <div class=&quot;row&quot; style=&quot;gap:11px&quot;>
+                  <div style=&quot;width:42px;height:42px;border-radius:12px;background:var(--gold-tint);display:grid;place-items:center;font-size:20px&quot;>🔥</div>
+                  <div><b style=&quot;font-size:14.5px&quot;>7-month on-time streak</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>Keep it up to unlock a fee-free month</div></div>
+                </div>
+                <div style=&quot;text-align:right&quot;><div style=&quot;font-weight:800;color:var(--gold);font-size:18px&quot;>₹840</div><div class=&quot;faint&quot; style=&quot;font-size:11px&quot;>coins</div></div>
+              </div>
+            </div>
+            <div class=&quot;row fade d3&quot; style=&quot;gap:10px;margin-top:14px&quot;>
+              <div onclick=&quot;tabTo('p-protect')&quot; style=&quot;flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer&quot;><svg style=&quot;width:24px;height:24px;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/></svg><div style=&quot;font-size:11.5px;font-weight:600;margin-top:6px&quot;>Protection</div></div>
+              <div onclick=&quot;tabTo('p-store')&quot; style=&quot;flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer&quot;><svg style=&quot;width:24px;height:24px;color:var(--gold)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M6 8h12l-1 11H7L6 8z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M9 8a3 3 0 1 1 6 0&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/></svg><div style=&quot;font-size:11.5px;font-weight:600;margin-top:6px&quot;>School Store</div></div>
+              <div onclick=&quot;goView('p-admissions')&quot; style=&quot;flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer&quot;><svg style=&quot;width:24px;height:24px;color:var(--info)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M3 9l9-5 9 5-9 5-9-5z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M7 11v4c0 1 2.2 2 5 2s5-1 5-2v-4&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/></svg><div style=&quot;font-size:11.5px;font-weight:600;margin-top:6px&quot;>Find Schools</div></div>
+            </div>
+            <div class=&quot;card fade d4&quot; style=&quot;margin-top:14px;cursor:pointer&quot; onclick=&quot;tabTo('p-protect')&quot;>
+              <div class=&quot;row&quot; style=&quot;gap:12px&quot;>
+                <div style=&quot;width:42px;height:42px;border-radius:12px;background:var(--primary-tint);display:grid;place-items:center&quot;><svg style=&quot;width:22px;height:22px;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M9.5 12l1.7 1.7L15 10&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></div>
+                <div style=&quot;flex:1&quot;><b style=&quot;font-size:14.5px&quot;>Education Continuity — Active</b><div class=&quot;faint&quot; style=&quot;font-size:12.5px;margin-top:1px&quot;>Aarav's schooling stays funded through Class 12</div></div>
+                <svg style=&quot;width:18px;height:18px;color:var(--faint)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M9 6l6 6-6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>
+              </div>
+            </div>
+            <div class=&quot;eyebrow fade d5&quot; style=&quot;margin:22px 4px 10px&quot;>Recent activity</div>
+            <div class=&quot;group fade d5&quot;>
+              <div class=&quot;li&quot; onclick=&quot;tabTo('p-pay')&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg></div><div class=&quot;tx&quot;><b>May fee paid</b><small>Settled to school · 14 May</small></div><div style=&quot;font-weight:700;font-size:14px&quot;>₹6,400</div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--info-tint);color:var(--info)&quot;>💬</div><div class=&quot;tx&quot;><b>WhatsApp reminder received</b><small>Greenwood Intl. · 1 Jun</small></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:#EEF1EE;color:var(--muted)&quot;>📌</div><div class=&quot;tx&quot;><b>Notice: PTM on 12 Jun</b><small>Greenwood Intl. · 1 May</small></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-pay&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Fees</h1><p>Aarav Sharma · Class 5-B</p></div>
+            <div class=&quot;card&quot; style=&quot;background:linear-gradient(150deg,#0E7A59,#0A5A41);color:#fff&quot;>
+              <div style=&quot;opacity:.8;font-size:13px&quot;>Amount due — June 2026</div>
+              <div class=&quot;amt&quot; data-count=&quot;6400&quot; style=&quot;margin:4px 0&quot;>₹0</div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;margin-top:4px&quot;><span style=&quot;opacity:.85;font-size:13px&quot;>Due 10 Jun · in 4 days</span>
+                <button onclick=&quot;openPay()&quot; style=&quot;border:0;background:#fff;color:#0A5A41;font-weight:700;font-family:var(--sf);font-size:14px;padding:11px 22px;border-radius:13px;cursor:pointer&quot;>Pay now</button></div>
+            </div>
+            <div class=&quot;card&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div class=&quot;eyebrow&quot;>Choose how to pay</div><span class=&quot;chip blue&quot;>Flexible</span></div>
+              <div class=&quot;iseg&quot; style=&quot;margin-top:12px&quot;>
+                <button class=&quot;on&quot; onclick=&quot;emi(this,1)&quot;>Full now</button><button onclick=&quot;emi(this,3)&quot;>3 months</button><button onclick=&quot;emi(this,6)&quot;>6 months</button>
+              </div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;align-items:baseline&quot;>
+                <div><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>You pay</div><div id=&quot;emiAmt&quot; style=&quot;font-size:22px;font-weight:800;color:var(--primary-deep)&quot;>₹6,400 now</div></div>
+                <div style=&quot;text-align:right&quot;><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>School receives</div><div style=&quot;font-weight:700;font-size:14px;color:var(--primary)&quot;>100% by 15 Jun</div></div>
+              </div>
+              <p id=&quot;emiNote&quot; class=&quot;faint&quot; style=&quot;font-size:11.5px;margin-top:10px;line-height:1.5&quot;>Pay the full fee in one go. Settles to the school by the 15th.</p>
+            </div>
+            <div class=&quot;banner&quot; style=&quot;background:var(--gold-tint);margin-top:14px&quot;><svg style=&quot;color:var(--gold)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/><path d=&quot;M12 8v5M12 16h.01&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg><div style=&quot;font-size:13px;color:#7a5a12;line-height:1.45&quot;><b style=&quot;color:var(--gold)&quot;>Pay early, save.</b> Clear before the 5th and earn ₹120 EduShield coins.</div></div>
+            <div class=&quot;iseg&quot; style=&quot;margin-top:18px&quot;><button class=&quot;on&quot; onclick=&quot;feeTab(this,'up')&quot;>Upcoming</button><button onclick=&quot;feeTab(this,'hist')&quot;>History</button></div>
+            <div id=&quot;feeUp&quot; class=&quot;group&quot;>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--gold-tint);color:var(--gold)&quot;>📅</div><div class=&quot;tx&quot;><b>June 2026 — Tuition</b><small>Due 10 Jun</small></div><div style=&quot;text-align:right&quot;><div style=&quot;font-weight:700&quot;>₹6,400</div><span class=&quot;chip gold&quot;><span class=&quot;dot&quot;></span>Due</span></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:#EEF1EE;color:var(--muted)&quot;>📅</div><div class=&quot;tx&quot;><b>July 2026 — Tuition</b><small>Due 10 Jul</small></div><div style=&quot;text-align:right&quot;><div style=&quot;font-weight:700&quot;>₹6,400</div><span class=&quot;chip gray&quot;>Upcoming</span></div></div>
+            </div>
+            <div id=&quot;feeHist&quot; class=&quot;group&quot; style=&quot;display:none&quot;>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>✓</div><div class=&quot;tx&quot;><b>May 2026</b><small>Settled · 14 May</small></div><div style=&quot;text-align:right&quot;><div style=&quot;font-weight:700&quot;>₹6,400</div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Paid</span></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>✓</div><div class=&quot;tx&quot;><b>April 2026</b><small>Settled · 13 Apr</small></div><div style=&quot;text-align:right&quot;><div style=&quot;font-weight:700&quot;>₹6,400</div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Paid</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-protect&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Protection</h1><p>Education Continuity Support</p></div>
+            <div class=&quot;hero&quot;>
+              <svg class=&quot;wm&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#fff&quot;/></svg>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;position:relative&quot;><span class=&quot;eyebrow&quot; style=&quot;color:rgba(255,255,255,.7)&quot;>Status</span><span class=&quot;chip&quot; style=&quot;background:rgba(255,255,255,.16);color:#fff&quot;><span class=&quot;dot&quot; style=&quot;background:#7BE0B4&quot;></span>Active</span></div>
+              <div style=&quot;font-size:18px;font-weight:700;margin-top:10px;position:relative;line-height:1.35&quot;>If life takes an unexpected turn, Aarav's education won't stop.</div>
+              <div style=&quot;opacity:.85;font-size:13px;margin-top:8px;position:relative&quot;>Partner-backed continuity · ₹149/month add-on</div>
+            </div>
+            <div class=&quot;card&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div class=&quot;eyebrow&quot;>Education secured calculator</div><span class=&quot;chip green&quot;>Live</span></div>
+              <div style=&quot;text-align:center;margin-top:14px&quot;>
+                <div id=&quot;calcAmt&quot; style=&quot;font-size:34px;font-weight:800;color:var(--primary-deep);letter-spacing:-1px&quot;>₹0</div>
+                <div id=&quot;calcSub&quot; class=&quot;faint&quot; style=&quot;font-size:12.5px;margin-top:2px&quot;>covered from Class 5 to Class 12</div>
+              </div>
+              <input type=&quot;range&quot; min=&quot;1&quot; max=&quot;11&quot; value=&quot;5&quot; class=&quot;slider&quot; id=&quot;classSlider&quot; oninput=&quot;calc()&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><span class=&quot;faint&quot; style=&quot;font-size:11px&quot;>Class <b id=&quot;classLabel&quot; style=&quot;color:var(--ink)&quot;>5</b></span><span class=&quot;faint&quot; style=&quot;font-size:11px&quot;>assumes 11%/yr education inflation</span></div>
+            </div>
+            <div class=&quot;card&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:12px&quot;>What's included</div>
+              <div class=&quot;tl&quot;>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>School fee support</b><small>Tuition kept paid so the child stays enrolled</small></div>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>Continuity at the same school</b><small>No mid-year disruption</small></div>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>Relocation support</b><small>Move to a similar-cost partner school if needed</small></div>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>Family support desk · 24×7</b><small>Guided help, never alone with the school</small></div>
+              </div>
+            </div>
+            <div class=&quot;card&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:10px&quot;>Registered guardian</div>
+              <div class=&quot;row&quot; style=&quot;gap:12px&quot;><div class=&quot;av sm&quot;>RS</div><div style=&quot;flex:1&quot;><b style=&quot;font-size:14.5px&quot;>Rajesh Sharma</b><div class=&quot;faint&quot; style=&quot;font-size:12.5px&quot;>Father · Primary earning guardian</div></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Verified</span></div>
+            </div>
+            <button class=&quot;btn gold&quot; style=&quot;margin-top:16px&quot; onclick=&quot;goView('p-emergency')&quot;>Request continuity support</button>
+            <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:12px;line-height:1.5;padding:0 6px&quot;>Partner-backed education-protection benefit via a licensed insurer partner, subject to plan eligibility and the school agreement. Not insurance advice. Prototype build.</p>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-emergency&quot;>
+          <div class=&quot;nav&quot;><button class=&quot;back&quot; onclick=&quot;tabTo('p-protect')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M15 6l-6 6 6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></button><div class=&quot;ttl&quot;>Continuity Support</div></div>
+          <div class=&quot;pad&quot; style=&quot;padding-top:4px&quot;>
+            <div class=&quot;banner&quot; style=&quot;background:var(--primary-tint)&quot;><svg style=&quot;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/></svg><div style=&quot;font-size:13px;color:var(--primary-deep);line-height:1.5&quot;><b>We're here for your family.</b> Tell us what's happened — our team calls within 24 hours and handles the school directly.</div></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>How it works</div>
+            <div class=&quot;card&quot;><div class=&quot;tl&quot;>
+              <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>1. Raise a request</b><small>Basic details — no paperwork now</small></div>
+              <div class=&quot;step active&quot;><div class=&quot;node&quot;></div><b>2. Support team calls you</b><small>Within 24 hours, in your language</small></div>
+              <div class=&quot;step&quot;><div class=&quot;node&quot;></div><b>3. School informed by us</b><small>We coordinate so the child keeps attending</small></div>
+              <div class=&quot;step&quot;><div class=&quot;node&quot;></div><b>4. Continuity activated</b><small>Fees supported per plan &amp; agreement</small></div>
+            </div></div>
+            <button class=&quot;btn&quot; style=&quot;margin-top:18px&quot; onclick=&quot;emergencySent()&quot;>Submit request for support</button>
+            <button class=&quot;btn ghost&quot; style=&quot;margin-top:10px&quot; onclick=&quot;alert('Demo: dials the 24×7 EduShield family helpline.')&quot;>Call family helpline · 24×7</button>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-store&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>School Store</h1><p>School-approved · delivered to you</p></div>
+            <div class=&quot;banner&quot; style=&quot;background:var(--info-tint);margin-bottom:16px&quot;><svg style=&quot;color:var(--info)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg><div style=&quot;font-size:12.5px;color:#1e5066;line-height:1.45&quot;>Every item is approved by Greenwood Intl. — correct size, colour and edition, guaranteed.</div></div>
+            <div class=&quot;pgrid&quot;>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:var(--primary-tint)&quot;>👕</div><div class=&quot;pb&quot;><b>Uniform Set (Summer)</b><div class=&quot;pr&quot;>₹1,250</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,1250)&quot;>Add</button></div></div>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:var(--gold-tint)&quot;>📚</div><div class=&quot;pb&quot;><b>NCERT Bundle · Cl.5</b><div class=&quot;pr&quot;>₹890</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,890)&quot;>Add</button></div></div>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:var(--info-tint)&quot;>👟</div><div class=&quot;pb&quot;><b>School Shoes (Black)</b><div class=&quot;pr&quot;>₹999</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,999)&quot;>Add</button></div></div>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:#F1ECE2&quot;>🎒</div><div class=&quot;pb&quot;><b>School Backpack</b><div class=&quot;pr&quot;>₹1,150</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,1150)&quot;>Add</button></div></div>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:var(--primary-tint)&quot;>📐</div><div class=&quot;pb&quot;><b>Stationery Kit</b><div class=&quot;pr&quot;>₹320</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,320)&quot;>Add</button></div></div>
+              <div class=&quot;prod&quot;><div class=&quot;ph&quot; style=&quot;background:var(--gold-tint)&quot;>🚌</div><div class=&quot;pb&quot;><b>Transport — June</b><div class=&quot;pr&quot;>₹1,400</div><button class=&quot;addbtn&quot; onclick=&quot;addCart(this,1400)&quot;>Add</button></div></div>
+            </div>
+            <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:16px&quot;>Greenwood Intl. earns a commission on every order through EduShield.</p>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-admissions&quot;>
+          <div class=&quot;nav&quot;><button class=&quot;back&quot; onclick=&quot;tabTo('p-home')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M15 6l-6 6 6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></button><div class=&quot;ttl&quot;>Find Schools</div></div>
+          <div class=&quot;pad&quot; style=&quot;padding-top:4px&quot;>
+            <div class=&quot;card&quot; style=&quot;padding:0;display:flex;align-items:center;margin-bottom:10px&quot;><div style=&quot;padding:14px;color:var(--faint)&quot;><svg style=&quot;width:20px;height:20px&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;/><path d=&quot;M20 20l-3-3&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg></div><input placeholder=&quot;Search by area, board, fees…&quot; style=&quot;flex:1;border:0;background:transparent;font-family:var(--sf);font-size:15px;padding:14px 6px&quot; readonly></div>
+            <div class=&quot;row&quot; style=&quot;gap:8px;overflow-x:auto;padding:4px 0 10px&quot;><span class=&quot;chip green&quot; style=&quot;white-space:nowrap&quot;><span class=&quot;dot&quot;></span>Continuity partner</span><span class=&quot;chip gray&quot; style=&quot;white-space:nowrap&quot;>CBSE</span><span class=&quot;chip gray&quot; style=&quot;white-space:nowrap&quot;>&amp;lt; ₹8k/mo</span><span class=&quot;chip gray&quot; style=&quot;white-space:nowrap&quot;>&amp;lt; 5 km</span></div>
+            <div class=&quot;card&quot;><div class=&quot;frow&quot; style=&quot;border:0;padding:0&quot;><div class=&quot;av sm&quot;>GI</div><div style=&quot;flex:1;margin-left:12px&quot;><b style=&quot;font-size:14.5px&quot;>Greenwood International</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>CBSE · 1.2 km · ⭐ 4.6</div></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Partner</span></div><div class=&quot;row&quot; style=&quot;gap:8px;margin-top:8px&quot;><span class=&quot;chip gray&quot;>₹6,400/mo</span><span class=&quot;chip gray&quot;>Cl. 1–12</span><span class=&quot;chip gold&quot;>Continuity ✓</span></div></div>
+            <div class=&quot;card&quot; style=&quot;margin-top:12px&quot;><div class=&quot;frow&quot; style=&quot;border:0;padding:0&quot;><div class=&quot;av sm gold&quot;>RV</div><div style=&quot;flex:1;margin-left:12px&quot;><b style=&quot;font-size:14.5px&quot;>Riverdale Vidya Mandir</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>ICSE · 3.4 km · ⭐ 4.4</div></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Partner</span></div><div class=&quot;row&quot; style=&quot;gap:8px;margin-top:8px&quot;><span class=&quot;chip gray&quot;>₹7,200/mo</span><span class=&quot;chip gray&quot;>Cl. 1–10</span><span class=&quot;chip gold&quot;>Continuity ✓</span></div><button class=&quot;btn ghost&quot; style=&quot;margin-top:12px;padding:12px&quot; onclick=&quot;alert('Demo: enquiry sent. The school sees you as a new lead instantly.')&quot;>Enquire about admission</button></div>
+            <div class=&quot;card&quot; style=&quot;margin-top:12px&quot;><div class=&quot;frow&quot; style=&quot;border:0;padding:0&quot;><div class=&quot;av sm&quot; style=&quot;background:linear-gradient(135deg,#2D6E8E,#1e5066)&quot;>SP</div><div style=&quot;flex:1;margin-left:12px&quot;><b style=&quot;font-size:14.5px&quot;>St. Paul's Academy</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>CBSE · 4.8 km · ⭐ 4.7</div></div><span class=&quot;chip gray&quot;>Joining soon</span></div><div class=&quot;row&quot; style=&quot;gap:8px;margin-top:8px&quot;><span class=&quot;chip gray&quot;>₹5,800/mo</span><span class=&quot;chip gray&quot;>Cl. 1–12</span></div></div>
+          </div>
+        </div>
+
+        <div class=&quot;view&quot; data-view=&quot;p-profile&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Profile</h1></div>
+            <div class=&quot;card row&quot; style=&quot;gap:14px&quot;><div class=&quot;av gold&quot; style=&quot;width:54px;height:54px;font-size:20px&quot;>AS</div><div style=&quot;flex:1&quot;><b style=&quot;font-size:17px&quot;>Anjali Sharma</b><div class=&quot;faint&quot; style=&quot;font-size:13px&quot;>+91 98765 43210</div></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Verified</span></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Child &amp; school</div>
+            <div class=&quot;group&quot;>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>🎓</div><div class=&quot;tx&quot;><b>Aarav Sharma</b><small>Class 5-B · Roll 14</small></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--gold-tint);color:var(--gold)&quot;>🏫</div><div class=&quot;tx&quot;><b>Greenwood International</b><small>CBSE · Partner school</small></div></div>
+            </div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Documents &amp; records</div>
+            <div class=&quot;group&quot;>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:#EEF1EE;color:var(--muted)&quot;>🧾</div><div class=&quot;tx&quot;><b>Fee receipts</b><small>5 available</small></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:#EEF1EE;color:var(--muted)&quot;>📄</div><div class=&quot;tx&quot;><b>Continuity agreement</b><small>Signed · 12 Apr 2026</small></div></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:#EEF1EE;color:var(--muted)&quot;>🆔</div><div class=&quot;tx&quot;><b>Student ID &amp; KYC</b><small>Verified</small></div></div>
+            </div>
+            <div class=&quot;group&quot; style=&quot;margin-top:22px&quot;>
+              <div class=&quot;li&quot; onclick=&quot;alert('Demo: share code SHARMA840 — you and the new parent each get ₹200 coins.')&quot;><div class=&quot;ic&quot; style=&quot;background:var(--gold-tint);color:var(--gold)&quot;>🎁</div><div class=&quot;tx&quot;><b>Refer a parent · earn ₹200</b><small>Code SHARMA840</small></div><svg class=&quot;ch&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M9 6l6 6-6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;/></svg></div>
+              <div class=&quot;li&quot; style=&quot;cursor:default&quot;><div class=&quot;ic&quot; style=&quot;background:var(--ink);color:#fff&quot;>ℹ️</div><div class=&quot;tx&quot;><b>About this prototype</b><small>EduShield Parent · demo build</small></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class=&quot;tabbar&quot; id=&quot;parentTabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;p-home&quot; onclick=&quot;tabTo('p-home')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M4 11l8-7 8 7&quot; stroke=&quot;currentColor&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M6 10v9h12v-9&quot; stroke=&quot;currentColor&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg><span>Home</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;p-pay&quot; onclick=&quot;tabTo('p-pay')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><rect x=&quot;3&quot; y=&quot;6&quot; width=&quot;18&quot; height=&quot;13&quot; rx=&quot;2.5&quot; stroke=&quot;currentColor&quot;/><path d=&quot;M3 10h18&quot; stroke=&quot;currentColor&quot;/></svg><span>Fees</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;p-protect&quot; onclick=&quot;tabTo('p-protect')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-linejoin=&quot;round&quot;/></svg><span>Protect</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;p-store&quot; onclick=&quot;tabTo('p-store')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M6 8h12l-1 11H7L6 8z&quot; stroke=&quot;currentColor&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M9 8a3 3 0 1 1 6 0&quot; stroke=&quot;currentColor&quot;/></svg><span>Store</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;p-profile&quot; onclick=&quot;tabTo('p-profile')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><circle cx=&quot;12&quot; cy=&quot;8&quot; r=&quot;4&quot; stroke=&quot;currentColor&quot;/><path d=&quot;M4 20c0-3.5 3.5-6 8-6s8 2.5 8 6&quot; stroke=&quot;currentColor&quot; stroke-linecap=&quot;round&quot;/></svg><span>Profile</span></button>
+      </div>
+    </div>
+
+    <div class=&quot;cartbar&quot; id=&quot;cartBar&quot;><div><b id=&quot;cartTotal&quot;>₹0</b><div style=&quot;font-size:11px;opacity:.7&quot; id=&quot;cartCount&quot;>0 items</div></div><button onclick=&quot;checkout()&quot;>Checkout</button></div>
+
+    <div class=&quot;scrim&quot; id=&quot;payScrim&quot; onclick=&quot;closePay()&quot;></div>
+    <div class=&quot;sheet&quot; id=&quot;paySheet&quot;>
+      <div class=&quot;grab&quot;></div>
+      <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><h2 style=&quot;font-size:20px;font-weight:800&quot;>Pay fee</h2><button onclick=&quot;closePay()&quot; style=&quot;border:0;background:#EEF1EE;width:30px;height:30px;border-radius:99px;cursor:pointer;font-size:16px;color:var(--muted)&quot;>✕</button></div>
+      <div class=&quot;card&quot; style=&quot;background:var(--primary-tint);box-shadow:none;display:flex;justify-content:space-between;align-items:center;margin:10px 0 16px&quot;><div><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>June tuition · Aarav Sharma</div><div style=&quot;font-weight:800;font-size:22px;color:var(--primary-deep)&quot;>₹6,400</div></div><span class=&quot;chip green&quot;>Settles by 15th</span></div>
+      <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:10px&quot;>Pay using UPI</div>
+      <div class=&quot;payopt sel&quot; onclick=&quot;selPay(this)&quot;><div class=&quot;logo&quot; style=&quot;background:#fff;border:1px solid var(--line)&quot;><span style=&quot;background:linear-gradient(135deg,#4285F4,#EA4335,#FBBC05,#34A853);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900&quot;>G</span></div><div style=&quot;flex:1&quot;><b>Google Pay</b><br><small>anjali@oksbi</small></div><div class=&quot;radio&quot;></div></div>
+      <div class=&quot;payopt&quot; onclick=&quot;selPay(this)&quot;><div class=&quot;logo&quot; style=&quot;background:#5F259F&quot;>pe</div><div style=&quot;flex:1&quot;><b>PhonePe</b><br><small>UPI · linked</small></div><div class=&quot;radio&quot;></div></div>
+      <div class=&quot;payopt&quot; onclick=&quot;selPay(this)&quot;><div class=&quot;logo&quot; style=&quot;background:#00BAF2&quot;>Pt</div><div style=&quot;flex:1&quot;><b>Paytm UPI</b><br><small>UPI · linked</small></div><div class=&quot;radio&quot;></div></div>
+      <div class=&quot;eyebrow&quot; style=&quot;margin:14px 0 10px&quot;>Other methods</div>
+      <div class=&quot;payopt&quot; onclick=&quot;selPay(this)&quot;><div class=&quot;logo&quot; style=&quot;background:var(--ink)&quot;>💳</div><div style=&quot;flex:1&quot;><b>Debit / Credit card</b><br><small>Visa, RuPay, Mastercard</small></div><div class=&quot;radio&quot;></div></div>
+      <div class=&quot;payopt&quot; onclick=&quot;selPay(this)&quot;><div class=&quot;logo&quot; style=&quot;background:var(--info)&quot;>🏦</div><div style=&quot;flex:1&quot;><b>Net banking</b><br><small>All major banks</small></div><div class=&quot;radio&quot;></div></div>
+      <button class=&quot;btn&quot; style=&quot;margin-top:10px&quot; onclick=&quot;payNow()&quot;>Pay ₹6,400</button>
+      <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:12px&quot;>🔒 Secured by EduShield Pay · 256-bit encryption.</p>
+    </div>
+
+    <div id=&quot;processing&quot;><div class=&quot;spin&quot;></div><p style=&quot;margin-top:18px;font-weight:600;color:var(--muted)&quot;>Processing payment…</p></div>
+
+    <div class=&quot;view&quot; id=&quot;paySuccess&quot; style=&quot;position:absolute;inset:0;background:var(--bg);z-index:110;display:none&quot;>
+      <div class=&quot;pad&quot; style=&quot;display:flex;flex-direction:column;height:100%;text-align:center;padding-top:0&quot;>
+        <div class=&quot;ok&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path class=&quot;checkpath&quot; d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;var(--primary)&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></div>
+        <h1 style=&quot;font-size:25px;font-weight:800;margin-top:20px&quot;>Fee paid successfully</h1>
+        <p class=&quot;muted&quot; style=&quot;font-size:14.5px;margin-top:8px;line-height:1.5&quot;>Payment received for Aarav Sharma.<br>School settlement scheduled by <b style=&quot;color:var(--primary)&quot;>15 Jun</b>.</p>
+        <div class=&quot;card&quot; style=&quot;margin-top:22px;text-align:left&quot;>
+          <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:6px 0&quot;><span class=&quot;faint&quot; style=&quot;font-size:13px&quot;>Amount</span><b>₹6,400</b></div>
+          <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:6px 0&quot;><span class=&quot;faint&quot; style=&quot;font-size:13px&quot;>Paid via</span><b>Google Pay · UPI</b></div>
+          <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:6px 0&quot;><span class=&quot;faint&quot; style=&quot;font-size:13px&quot;>Txn ID</span><b style=&quot;font-variant-numeric:tabular-nums&quot;>EDU8F2K9X41</b></div>
+          <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:6px 0&quot;><span class=&quot;faint&quot; style=&quot;font-size:13px&quot;>Settlement to school</span><b style=&quot;color:var(--primary)&quot;>By 15 Jun</b></div>
+        </div>
+        <div class=&quot;banner&quot; style=&quot;background:var(--primary-tint);margin-top:14px;text-align:left&quot;><svg style=&quot;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/></svg><div style=&quot;font-size:12.5px;color:var(--primary-deep);line-height:1.45&quot;>Aarav's education continuity stays <b>Active</b>. +₹120 coins earned for early payment.</div></div>
+        <div style=&quot;margin-top:auto;padding-bottom:8px&quot;><button class=&quot;btn ghost&quot; style=&quot;margin-bottom:10px&quot; onclick=&quot;alert('Demo: receipt PDF downloaded.')&quot;>Download receipt</button><button class=&quot;btn&quot; onclick=&quot;closeSuccess()&quot;>Done</button></div>
+      </div>
+    </div>
+
+  </div>
+</div></div>
+
+<script>
+function $(s,c){return (c||document).querySelector(s)}
+function $all(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))}
+function inr(n){n=Math.round(n);var s=String(n),l3=s.slice(-3),r=s.slice(0,-3);if(r)l3=','+l3;r=r.replace(/\B(?=(\d{2})+(?!\d))/g,',');return '\u20B9'+r+l3;}
+window.addEventListener('load',function(){ $('#parentTabs').style.display='none'; setTimeout(function(){ $('#splash').classList.add('gone'); },2000); });
+function countUp(el){ var t=parseInt(el.dataset.count,10),dur=900,st=null; function step(ts){ if(!st)st=ts; var p=Math.min((ts-st)/dur,1); el.textContent=inr(Math.floor(t*(1-Math.pow(1-p,3)))); if(p<1)requestAnimationFrame(step); } requestAnimationFrame(step); }
+function goView(v){
+  var pre=(v==='p-login'||v==='p-otp');
+  $all('#parentApp .view').forEach(function(el){ el.classList.toggle('active', el.dataset.view===v); });
+  $('#parentTabs').style.display = pre ? 'none':'flex';
+  var vp=$('#pViewport'); if(vp) vp.scrollTop=0;
+  var av=$('.view[data-view=&quot;'+v+'&quot;]'); if(av) $all('[data-count]',av).forEach(countUp);
+  $('#cartBar').classList.toggle('on', v==='p-store' &amp;&amp; cart>0);
+}
+function tabTo(v){ goView(v); $all('#parentTabs .tab').forEach(function(t){ t.classList.toggle('on', t.dataset.t===v); }); }
+function goHome(){ tabTo('p-home'); }
+var otp=$('.view[data-view=&quot;p-otp&quot;]');
+new MutationObserver(function(){ if(otp.classList.contains('active')) fillOtp(); }).observe(otp,{attributes:true,attributeFilter:['class']});
+function fillOtp(){ var cells=$all('#otpWrap .otp'),code=['4','7','2','9']; cells.forEach(function(c){c.textContent='';c.classList.remove('fill')}); code.forEach(function(d,i){ setTimeout(function(){ cells[i].textContent=d; cells[i].classList.add('fill'); },350+i*200); }); }
+function feeTab(b,w){ $all('.iseg button',b.parentNode).forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); $('#feeUp').style.display=w==='up'?'block':'none'; $('#feeHist').style.display=w==='hist'?'block':'none'; }
+function emi(b,n){ $all('.iseg button',b.parentNode).forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); if(n===1){ $('#emiAmt').textContent='\u20B96,400 now'; $('#emiNote').textContent='Pay the full fee in one go. Settles to the school by the 15th.'; } else { var per=Math.round(6400/n); $('#emiAmt').textContent=inr(per)+' \u00d7 '+n; $('#emiNote').innerHTML='Split into '+n+' instalments at 0% interest \u2014 the school still receives <b>100% by the 15th</b>, financed via our NBFC partner.'; } }
+function calc(){ var c=parseInt($('#classSlider').value,10); $('#classLabel').textContent=c; var yrs=12-c+1,yearly=76800,tot=0; for(var i=0;i<yrs;i++){ tot+=yearly*Math.pow(1.11,i); } $('#calcAmt').textContent=inr(tot); $('#calcSub').textContent='covered from Class '+c+' to Class 12 \u00b7 '+yrs+' years'; }
+var cart=0,cartN=0;
+function addCart(b,p){ if(b.classList.contains('added'))return; b.classList.add('added'); b.textContent='Added \u2713'; cart+=p; cartN++; $('#cartTotal').textContent=inr(cart); $('#cartCount').textContent=cartN+(cartN>1?' items':' item'); $('#cartBar').classList.add('on'); }
+function checkout(){ alert('Demo: '+cartN+' item(s) \u00b7 '+inr(cart)+' paid. Delivered via Greenwood Intl. \u2014 the school earns its commission automatically.'); cart=0;cartN=0; $('#cartBar').classList.remove('on'); $all('.addbtn').forEach(function(x){x.classList.remove('added');x.textContent='Add'}); }
+function openPay(){ $('#payScrim').classList.add('on'); $('#paySheet').classList.add('on'); }
+function closePay(){ $('#payScrim').classList.remove('on'); $('#paySheet').classList.remove('on'); }
+function selPay(el){ $all('.payopt').forEach(function(p){p.classList.remove('sel')}); el.classList.add('sel'); }
+function payNow(){ closePay(); var pr=$('#processing'); pr.classList.add('on'); setTimeout(function(){ pr.classList.remove('on'); var s=$('#paySuccess'); s.style.display='block'; s.classList.add('active'); var p=$('.checkpath'); p.style.animation='none'; void p.offsetWidth; p.style.animation=''; },1300); }
+function closeSuccess(){ var s=$('#paySuccess'); s.classList.remove('active'); s.style.display='none'; tabTo('p-home'); }
+function emergencySent(){ alert(&quot;Request received.\n\nOur family support team will call +91 98765 43210 within 24 hours. We coordinate with the school directly \u2014 the child keeps attending.&quot;); tabTo('p-protect'); }
+function restart(){ closePay(); $('#paySuccess').style.display='none'; cart=0;cartN=0; $('#cartBar').classList.remove('on'); goView('p-login'); $('#splash').classList.remove('gone'); setTimeout(function(){ $('#splash').classList.add('gone'); },1500); }
+calc();
+</script>
+</body>
+</html>
+"></iframe>
+  <iframe id="frS" srcdoc="<!DOCTYPE html>
+<html lang=&quot;en&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover&quot;>
+<meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot;>
+<meta name=&quot;theme-color&quot; content=&quot;#0A5A41&quot;>
+<title>EduShield — Schools</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#EBEEEA;--ink:#0C211C;--muted:#64726B;--faint:#90A099;--line:#E6E9E4;--card:#FFFFFF;
+  --primary:#0E7A59;--primary-deep:#0A5A41;--primary-tint:#E5F1EC;
+  --gold:#C98A1E;--gold-soft:#E0A93B;--gold-tint:#FBF0D8;
+  --danger:#BC4F39;--danger-tint:#F6E5E0;--info:#2D6E8E;--info-tint:#E2EEF3;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --sf:-apple-system,BlinkMacSystemFont,&quot;SF Pro Text&quot;,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif;
+}
+html,body{height:100%}
+body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(circle at 20% 0%,#2a3a33,#161b18 55%,#0f1310);color:var(--ink);display:flex;flex-direction:column;align-items:center;min-height:100%;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.demo-bar{width:100%;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 16px;position:sticky;top:0;z-index:200;background:rgba(20,26,23,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-brand{display:flex;align-items:center;gap:8px;color:#cfe3da;font-size:13px;font-weight:600}
+.demo-brand svg{width:18px;height:18px}
+.seg{display:flex;background:rgba(255,255,255,.08);border-radius:11px;padding:3px}
+.seg button{border:0;background:transparent;color:#fff;font-family:var(--sf);font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:8px}
+.seg button.on{background:#fff;color:#0A5A41}
+.demo-reset{border:0;background:rgba(255,255,255,.08);color:#cfe3da;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.demo-reset:active{transform:scale(.92)}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;padding:26px 16px 40px;width:100%}
+.device{width:390px;height:820px;max-height:calc(100vh - 120px);background:#000;border-radius:54px;padding:11px;position:relative;box-shadow:0 0 0 2px #2c322f,0 40px 90px -20px rgba(0,0,0,.75),0 0 120px -40px rgba(14,122,89,.4)}
+.screen{width:100%;height:100%;background:var(--bg);border-radius:44px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:96px;height:28px;background:#000;border-radius:18px;z-index:130}
+.statusbar{height:50px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 7px;font-size:14px;font-weight:600;color:var(--ink);z-index:60}
+.statusbar .sb-r{display:flex;align-items:center;gap:6px}
+.statusbar .sb-r svg{width:17px;height:13px}
+.app{flex:1;display:flex;flex-direction:column;min-height:0}
+.appbar{flex:none;display:flex;align-items:center;gap:11px;padding:2px 18px 12px;z-index:35}
+.appbar .av{width:42px;height:42px;border-radius:12px;font-size:15px}
+.appbar .nm b{font-size:16px;font-weight:800;letter-spacing:-.3px;display:block;line-height:1.1}
+.appbar .nm small{font-size:11.5px;color:var(--faint)}
+.bell{margin-left:auto;width:40px;height:40px;border-radius:12px;background:#fff;border:0;display:grid;place-items:center;cursor:pointer;position:relative;box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+.bell svg{width:20px;height:20px;color:var(--ink)}
+.bell .badge{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:99px;background:var(--danger);border:2px solid #fff}
+.viewport{flex:1;position:relative;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;display:none}
+.view.active{display:block;animation:vin .42s var(--ease)}
+@keyframes vin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.view::-webkit-scrollbar{display:none}
+.pad{padding:2px 18px 132px}
+.tabbar{flex:none;height:84px;background:rgba(255,255,255,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid var(--line);display:flex;padding:8px 4px 24px;z-index:80}
+.tab{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--faint);font-family:var(--sf);padding-top:4px}
+.tab svg{width:24px;height:24px;stroke-width:1.9}
+.tab span{font-size:10px;font-weight:600}
+.tab.on{color:var(--primary)}
+.lt{padding:4px 0 14px}.lt h1{font-size:27px;font-weight:800;letter-spacing:-.6px}.lt p{color:var(--muted);font-size:13.5px;margin-top:2px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint)}
+.card{background:var(--card);border-radius:22px;padding:18px;box-shadow:0 1px 2px rgba(12,33,28,.04),0 12px 28px -18px rgba(12,33,28,.18)}
+.row{display:flex;align-items:center}
+.btn{width:100%;border:0;border-radius:16px;padding:16px;font-family:var(--sf);font-size:15.5px;font-weight:700;cursor:pointer;transition:transform .12s,filter .2s;color:#fff;background:var(--primary);box-shadow:0 8px 20px -8px rgba(14,122,89,.6)}
+.btn:active{transform:scale(.975)}
+.btn.gold{background:linear-gradient(135deg,#E0A93B,#C98A1E);box-shadow:0 8px 20px -8px rgba(201,138,30,.6)}
+.btn.ghost{background:var(--primary-tint);color:var(--primary-deep);box-shadow:none}
+.btn.dark{background:var(--ink);box-shadow:none}
+.btn.wa{background:#25D366;box-shadow:0 8px 20px -8px rgba(37,211,102,.5);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.wa svg{width:19px;height:19px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:99px}
+.chip.green{background:var(--primary-tint);color:var(--primary-deep)}.chip.gold{background:var(--gold-tint);color:var(--gold)}
+.chip.red{background:var(--danger-tint);color:var(--danger)}.chip.blue{background:var(--info-tint);color:var(--info)}.chip.gray{background:#EEF1EE;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:99px;background:currentColor;display:inline-block}
+.muted{color:var(--muted)}.faint{color:var(--faint)}
+.nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;padding:6px 16px 12px;background:linear-gradient(var(--bg) 70%,transparent)}
+.nav .back{width:38px;height:38px;border-radius:99px;border:0;background:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+.nav .back svg{width:18px;height:18px}.nav .ttl{font-size:17px;font-weight:700}
+.group{background:#fff;border-radius:18px;overflow:hidden}
+.li{display:flex;align-items:center;gap:13px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:16px}.li .ic svg{width:19px;height:19px}
+.li .tx{flex:1;min-width:0}.li .tx b{font-size:14px;font-weight:600;display:block}.li .tx small{color:var(--faint);font-size:12px}
+.hero{border-radius:26px;padding:22px;color:#fff;position:relative;overflow:hidden;background:linear-gradient(150deg,#0E7A59,#0A5A41 70%,#073d2c)}
+.hero:after{content:&quot;&quot;;position:absolute;inset:0;background-image:radial-gradient(circle at 90% 10%,rgba(224,169,59,.28),transparent 45%);pointer-events:none}
+.hero .wm{position:absolute;right:-22px;bottom:-30px;width:160px;opacity:.12}
+.amt{font-size:36px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.av{border-radius:14px;background:linear-gradient(135deg,#0E7A59,#0A5A41);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.av.gold{background:linear-gradient(135deg,#E0A93B,#C98A1E)}.av.sm{width:38px;height:38px;border-radius:11px;font-size:14px}
+.iseg{display:flex;background:#EAEDEA;border-radius:12px;padding:3px;margin-bottom:12px;gap:2px}
 .iseg button{flex:1;border:0;background:transparent;font-family:var(--sf);font-size:12.5px;font-weight:600;color:var(--muted);padding:9px 4px;border-radius:9px;cursor:pointer}
 .iseg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .banner{border-radius:18px;padding:15px 16px;display:flex;gap:12px;align-items:flex-start}.banner svg{width:22px;height:22px;flex:none;margin-top:1px}
@@ -87,239 +628,300 @@ body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(c
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:.9}}
 .statgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.statbox{background:#fff;border-radius:18px;padding:14px}.statbox .k{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--faint);text-transform:uppercase}.statbox .v{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+.statbox{background:#fff;border-radius:18px;padding:14px;cursor:pointer;transition:transform .12s}.statbox:active{transform:scale(.96)}
+.statbox .k{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--faint);text-transform:uppercase}.statbox .v{font-size:25px;font-weight:800;letter-spacing:-.5px;margin-top:3px;font-variant-numeric:tabular-nums}
 .progress{height:8px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden;margin-top:6px}.progress span{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#E0A93B,#FBE6BC);width:0;transition:width 1.1s var(--ease)}
+.chart{display:flex;align-items:flex-end;gap:9px;height:118px;margin-top:6px}
+.chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
+.chart .bar{width:100%;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,#7FC4AC,#0E7A59);height:0;transition:height .9s var(--ease)}
+.chart .col.cur .bar{background:linear-gradient(180deg,#E0A93B,#C98A1E)}
+.chart .ml{font-size:10px;font-weight:700;color:var(--faint)}.chart .col.cur .ml{color:var(--gold)}
 .frow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line)}.frow:last-child{border-bottom:0}
 .frow .nm{flex:1;min-width:0}.frow .nm b{font-size:14px;font-weight:600;display:block}.frow .nm small{color:var(--faint);font-size:12px}
 .mini{border:0;background:#25D366;color:#fff;font-family:var(--sf);font-size:12px;font-weight:700;padding:8px 12px;border-radius:10px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px}
 .mini:active{transform:scale(.95)}.mini.sent{background:var(--primary-tint);color:var(--primary-deep)}
 .mini svg{width:13px;height:13px}
-.tl{position:relative;padding-left:28px}.tl:before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.search{background:#fff;border-radius:14px;display:flex;align-items:center;padding:0 6px 0 14px;margin-bottom:12px}
+.search svg{width:18px;height:18px;color:var(--faint);flex:none}
+.search input{flex:1;border:0;background:transparent;font-family:var(--sf);font-size:14.5px;padding:13px 10px;outline:none}
+.tl{position:relative;padding-left:28px}.tl:before{content:&quot;&quot;;position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
 .tl .step{position:relative;padding-bottom:18px}.tl .step:last-child{padding-bottom:0}
 .tl .step .node{position:absolute;left:-24px;top:2px;width:20px;height:20px;border-radius:99px;background:#fff;border:2px solid var(--line);display:grid;place-items:center}
 .tl .step.done .node{background:var(--primary);border-color:var(--primary)}.tl .step.done .node svg{width:11px;height:11px;color:#fff}
 .tl .step.active .node{border-color:var(--gold);background:var(--gold-tint)}
 .tl .step b{font-size:14px;font-weight:600;display:block}.tl .step small{color:var(--faint);font-size:12px}
 .funnel{display:flex;flex-direction:column;gap:8px}
-.fbar{border-radius:12px;padding:12px 15px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.fbar{border-radius:12px;padding:12px 15px;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px}
 .plan{border-radius:20px;padding:18px;border:2px solid var(--line);background:#fff;margin-bottom:12px}
 .plan.cur{border-color:var(--primary);background:linear-gradient(160deg,var(--primary-tint),#fff)}
 .plan .ph{display:flex;justify-content:space-between;align-items:flex-start}
-.plan .pn{font-size:16px;font-weight:800}.plan .pp{font-size:24px;font-weight:800;color:var(--primary-deep);letter-spacing:-.5px}.plan .pp small{font-size:12px;font-weight:600;color:var(--faint)}
+.plan .pn{font-size:16px;font-weight:800}.plan .pp{font-size:23px;font-weight:800;color:var(--primary-deep);letter-spacing:-.5px}.plan .pp small{font-size:12px;font-weight:600;color:var(--faint)}
 .plan ul{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:7px}
 .plan li{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}.plan li svg{width:15px;height:15px;color:var(--primary);flex:none;margin-top:2px}
+.toast{position:absolute;left:16px;right:16px;bottom:100px;background:var(--ink);color:#fff;border-radius:15px;padding:14px 16px;display:flex;align-items:center;gap:11px;z-index:140;transform:translateY(180%);transition:transform .4s var(--ease),visibility 0s linear .4s;box-shadow:0 16px 34px -10px rgba(0,0,0,.55);pointer-events:none;visibility:hidden}
+.toast.on{visibility:visible;transition:transform .4s var(--ease),visibility 0s}
+.toast.on{transform:none}.toast svg{width:20px;height:20px;flex:none;color:#7BE0B4}.toast b{font-size:13.5px;font-weight:600;line-height:1.35}
 .fade{opacity:0;transform:translateY(10px);animation:fu .5s var(--ease) forwards}@keyframes fu{to{opacity:1;transform:none}}
-.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}.d4{animation-delay:.26s}.d5{animation-delay:.33s}
-@media (max-width:440px){.stage{padding:0}.device{width:100vw;height:calc(100vh - 55px);max-height:none;border-radius:0;padding:0;box-shadow:none}.screen{border-radius:0}.island{top:max(11px,env(safe-area-inset-top,11px))}.statusbar{padding-top:max(8px,env(safe-area-inset-top,8px));height:auto;min-height:46px}}
+.d1{animation-delay:.04s}.d2{animation-delay:.1s}.d3{animation-delay:.16s}.d4{animation-delay:.22s}.d5{animation-delay:.28s}.d6{animation-delay:.34s}
+@media (max-width:440px){body{display:block;background:var(--bg)}.demo-bar{display:none}.stage{padding:0}.device{width:100vw;height:100vh;max-height:none;border-radius:0;padding:0;box-shadow:none}.screen{border-radius:0}.island,.statusbar{display:none}.app{padding-top:env(safe-area-inset-top,0px)}}
 </style>
-</head>
+<style>.demo-bar{display:none!important}@media(max-width:440px){.device{height:100vh!important}}</style></head>
 <body>
-<div class="demo-bar">
-  <div class="demo-brand"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#E0A93B"/><path d="M9 12l2 2 4-4" stroke="#0A5A41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>EduShield</div>
-  <div class="seg"><button class="on" style="cursor:default">School Console · Prototype</button></div>
-  <button class="demo-reset" onclick="restart()" title="Restart">↻</button>
+<div class=&quot;demo-bar&quot;>
+  <div class=&quot;demo-brand&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#E0A93B&quot;/><path d=&quot;M9 12l2 2 4-4&quot; stroke=&quot;#0A5A41&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>EduShield</div>
+  <div class=&quot;seg&quot;><button class=&quot;on&quot; style=&quot;cursor:default&quot;>School Console · Prototype</button></div>
+  <button class=&quot;demo-reset&quot; onclick=&quot;restart()&quot; title=&quot;Restart&quot;>↻</button>
 </div>
 
-<div class="stage"><div class="device">
-  <div class="screen">
-    <div id="splash"><div class="glow"></div>
-      <svg class="logo" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#fff"/><path d="M9 12l2 2 4-4" stroke="#0A5A41" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="wm">EduShield</div><div class="tag">100% of fees, settled by the 15th.</div>
+<div class=&quot;stage&quot;><div class=&quot;device&quot;>
+  <div class=&quot;screen&quot;>
+    <div id=&quot;splash&quot;><div class=&quot;glow&quot;></div>
+      <svg class=&quot;logo&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#fff&quot;/><path d=&quot;M9 12l2 2 4-4&quot; stroke=&quot;#0A5A41&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg>
+      <div class=&quot;wm&quot;>EduShield</div><div class=&quot;tag&quot;>100% of fees, settled by the 15th.</div>
     </div>
 
-    <div class="island"></div>
-    <div class="statusbar"><div>9:41</div><div class="sb-r">
-      <svg viewBox="0 0 18 13" fill="currentColor"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="8" rx="1"/><rect x="10" y="2.5" width="3" height="10.5" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/></svg>
-      <svg viewBox="0 0 18 13" fill="currentColor"><path d="M9 2.5c2.5 0 4.8 1 6.5 2.6l-1.4 1.4A7 7 0 0 0 9 4.5 7 7 0 0 0 3.9 6.5L2.5 5.1A9.4 9.4 0 0 1 9 2.5zm0 4a5 5 0 0 1 3.5 1.4l-1.4 1.4A3 3 0 0 0 9 8.5a3 3 0 0 0-2.1.8L5.5 7.9A5 5 0 0 1 9 6.5z"/></svg>
-      <svg viewBox="0 0 26 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity=".4"/><rect x="3" y="3" width="16" height="7" rx="1.5" fill="currentColor"/><rect x="23" y="4.5" width="2" height="4" rx="1" fill="currentColor" fill-opacity=".5"/></svg>
+    <div class=&quot;island&quot;></div>
+    <div class=&quot;statusbar&quot;><div>9:41</div><div class=&quot;sb-r&quot;>
+      <svg viewBox=&quot;0 0 18 13&quot; fill=&quot;currentColor&quot;><rect x=&quot;0&quot; y=&quot;8&quot; width=&quot;3&quot; height=&quot;5&quot; rx=&quot;1&quot;/><rect x=&quot;5&quot; y=&quot;5&quot; width=&quot;3&quot; height=&quot;8&quot; rx=&quot;1&quot;/><rect x=&quot;10&quot; y=&quot;2.5&quot; width=&quot;3&quot; height=&quot;10.5&quot; rx=&quot;1&quot;/><rect x=&quot;15&quot; y=&quot;0&quot; width=&quot;3&quot; height=&quot;13&quot; rx=&quot;1&quot;/></svg>
+      <svg viewBox=&quot;0 0 18 13&quot; fill=&quot;currentColor&quot;><path d=&quot;M9 2.5c2.5 0 4.8 1 6.5 2.6l-1.4 1.4A7 7 0 0 0 9 4.5 7 7 0 0 0 3.9 6.5L2.5 5.1A9.4 9.4 0 0 1 9 2.5zm0 4a5 5 0 0 1 3.5 1.4l-1.4 1.4A3 3 0 0 0 9 8.5a3 3 0 0 0-2.1.8L5.5 7.9A5 5 0 0 1 9 6.5z&quot;/></svg>
+      <svg viewBox=&quot;0 0 26 13&quot; fill=&quot;none&quot;><rect x=&quot;1&quot; y=&quot;1&quot; width=&quot;21&quot; height=&quot;11&quot; rx=&quot;3&quot; stroke=&quot;currentColor&quot; stroke-opacity=&quot;.4&quot;/><rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;16&quot; height=&quot;7&quot; rx=&quot;1.5&quot; fill=&quot;currentColor&quot;/><rect x=&quot;23&quot; y=&quot;4.5&quot; width=&quot;2&quot; height=&quot;4&quot; rx=&quot;1&quot; fill=&quot;currentColor&quot; fill-opacity=&quot;.5&quot;/></svg>
     </div></div>
 
-    <div class="app" id="schoolApp">
-      <div class="viewport" id="sViewport">
+    <div class=&quot;app&quot; id=&quot;schoolApp&quot;>
+      <div class=&quot;appbar&quot;>
+        <div class=&quot;av&quot; onclick=&quot;goView('s-plans')&quot;>GI</div>
+        <div class=&quot;nm&quot;><b>Greenwood Intl.</b><small>Admin · Mon, 3 Jun</small></div>
+        <button class=&quot;bell&quot; onclick=&quot;toast('3 parents paid in the last hour \u00b7 \u20B919,200')&quot;><span class=&quot;badge&quot;></span><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 2 6.5H4c.5-1 2-2.5 2-6.5z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M10 19a2 2 0 0 0 4 0&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/></svg></button>
+      </div>
+      <div class=&quot;viewport&quot; id=&quot;sViewport&quot;>
 
         <!-- OVERVIEW -->
-        <div class="view active" data-view="s-home">
-          <div class="pad">
-            <div class="row fade d1" style="justify-content:space-between;margin-bottom:16px">
-              <div><p class="faint" style="font-size:13px">School Console</p><h1 style="font-size:23px;font-weight:800;letter-spacing:-.4px">Greenwood Intl.</h1></div>
-              <div class="av" style="cursor:pointer" onclick="goView('s-plans')">GI</div>
+        <div class=&quot;view active&quot; data-view=&quot;s-home&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;hero fade d1&quot;>
+              <svg class=&quot;wm&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z&quot; fill=&quot;#fff&quot;/></svg>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;position:relative&quot;><span class=&quot;eyebrow&quot; style=&quot;color:rgba(255,255,255,.7)&quot;>June 2026 · Fee assurance</span><span class=&quot;chip&quot; style=&quot;background:rgba(255,255,255,.16);color:#fff&quot;><span class=&quot;dot&quot; style=&quot;background:#7BE0B4&quot;></span>On track</span></div>
+              <div class=&quot;amt&quot; data-count=&quot;2188800&quot; style=&quot;margin:10px 0 2px&quot;>₹0</div>
+              <div style=&quot;opacity:.85;font-size:13px;position:relative&quot;>Guaranteed to your account in <b style=&quot;color:#FBE6BC&quot;>9 days</b> · by 15 Jun</div>
+              <div style=&quot;height:1px;background:rgba(255,255,255,.15);margin:16px 0&quot;></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;position:relative&quot;><div><div style=&quot;opacity:.78;font-size:12px&quot;>Collected so far</div><div style=&quot;font-weight:700;font-size:15px&quot;><span data-count=&quot;1860480&quot;>₹0</span> · 85%</div></div><div style=&quot;text-align:right&quot;><div style=&quot;opacity:.78;font-size:12px&quot;>Students</div><div style=&quot;font-weight:700;font-size:15px&quot;>342</div></div></div>
+              <div class=&quot;progress&quot;><span id=&quot;collBar&quot;></span></div>
             </div>
 
-            <div class="hero fade d2">
-              <svg class="wm" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#fff"/></svg>
-              <div class="row" style="justify-content:space-between;position:relative"><span class="eyebrow" style="color:rgba(255,255,255,.7)">June 2026 · Fee assurance</span><span class="chip" style="background:rgba(255,255,255,.16);color:#fff"><span class="dot" style="background:#7BE0B4"></span>On track</span></div>
-              <div class="amt" data-count="2188800" style="margin:10px 0 2px">₹0</div>
-              <div style="opacity:.85;font-size:13px;position:relative">Guaranteed settlement to your account by <b style="color:#FBE6BC">15 Jun</b></div>
-              <div style="height:1px;background:rgba(255,255,255,.15);margin:16px 0"></div>
-              <div class="row" style="justify-content:space-between;position:relative"><div><div style="opacity:.78;font-size:12px">Collected so far</div><div style="font-weight:700;font-size:15px"><span data-count="1860480">₹0</span> · 85%</div></div><div style="text-align:right"><div style="opacity:.78;font-size:12px">Students registered</div><div style="font-weight:700;font-size:15px">342</div></div></div>
-              <div class="progress"><span id="collBar"></span></div>
+            <div class=&quot;statgrid fade d2&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;statbox&quot; onclick=&quot;openFees('paid')&quot;><div class=&quot;k&quot;>Paid</div><div class=&quot;v&quot; style=&quot;color:var(--primary)&quot; data-count=&quot;291&quot; id=&quot;paidStat&quot;>0</div></div>
+              <div class=&quot;statbox&quot; onclick=&quot;openFees('pending')&quot;><div class=&quot;k&quot;>Pending</div><div class=&quot;v&quot; style=&quot;color:var(--gold)&quot; data-count=&quot;43&quot;>0</div></div>
+              <div class=&quot;statbox&quot; onclick=&quot;openFees('overdue')&quot;><div class=&quot;k&quot;>Overdue</div><div class=&quot;v&quot; style=&quot;color:var(--danger)&quot; data-count=&quot;8&quot;>0</div></div>
             </div>
 
-            <div class="statgrid fade d3" style="margin-top:14px">
-              <div class="statbox"><div class="k">Paid</div><div class="v" style="color:var(--primary)" data-count="291">0</div></div>
-              <div class="statbox"><div class="k">Pending</div><div class="v" style="color:var(--gold)" data-count="43">0</div></div>
-              <div class="statbox"><div class="k">Overdue</div><div class="v" style="color:var(--danger)" data-count="8">0</div></div>
-            </div>
-
-            <div class="banner fade d3" style="background:var(--primary-tint);margin-top:14px"><svg style="color:var(--primary)" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><div style="font-size:13px;color:var(--primary-deep);line-height:1.5"><b>You receive 100% regardless of pending parents.</b> EduShield carries the collection risk — you get the full ₹21,88,800 by the 15th.</div></div>
-
-            <!-- business model: your plan / take rate -->
-            <div class="card fade d4" style="margin-top:14px;cursor:pointer" onclick="goView('s-plans')">
-              <div class="row" style="justify-content:space-between"><div class="eyebrow">Your EduShield plan</div><span class="chip green">Growth</span></div>
-              <div class="row" style="justify-content:space-between;align-items:flex-end;margin-top:10px">
-                <div><div style="font-size:13px" class="muted">₹20 / student / month × 342</div><div style="font-size:22px;font-weight:800;color:var(--primary-deep);margin-top:2px">₹6,840<span style="font-size:13px;font-weight:600;color:var(--faint)">/mo</span></div></div>
-                <span class="chip gray">Billed separately ›</span>
+            <!-- collection trend chart -->
+            <div class=&quot;card fade d3&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div class=&quot;eyebrow&quot;>Collection trend</div><span class=&quot;chip green&quot;>+6% vs May</span></div>
+              <div class=&quot;chart&quot;>
+                <div class=&quot;col&quot;><div class=&quot;bar&quot; data-h=&quot;62&quot;></div><div class=&quot;ml&quot;>Jan</div></div>
+                <div class=&quot;col&quot;><div class=&quot;bar&quot; data-h=&quot;70&quot;></div><div class=&quot;ml&quot;>Feb</div></div>
+                <div class=&quot;col&quot;><div class=&quot;bar&quot; data-h=&quot;66&quot;></div><div class=&quot;ml&quot;>Mar</div></div>
+                <div class=&quot;col&quot;><div class=&quot;bar&quot; data-h=&quot;82&quot;></div><div class=&quot;ml&quot;>Apr</div></div>
+                <div class=&quot;col&quot;><div class=&quot;bar&quot; data-h=&quot;88&quot;></div><div class=&quot;ml&quot;>May</div></div>
+                <div class=&quot;col cur&quot;><div class=&quot;bar&quot; data-h=&quot;100&quot;></div><div class=&quot;ml&quot;>Jun</div></div>
               </div>
-              <p class="faint" style="font-size:11.5px;margin-top:10px;line-height:1.5">Your plan fee never touches parent settlements — your students' fees always reach you in full.</p>
             </div>
 
-            <div class="eyebrow fade d5" style="margin:22px 4px 10px">Quick actions</div>
-            <div class="row fade d5" style="gap:10px">
-              <div onclick="tabTo('s-fees')" style="flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer"><svg style="width:24px;height:24px;color:var(--gold)" viewBox="0 0 24 24" fill="none"><path d="M5 8h14M5 12h14M5 16h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><div style="font-size:11.5px;font-weight:600;margin-top:6px">Fee status</div></div>
-              <div onclick="tabTo('s-settle')" style="flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer"><svg style="width:24px;height:24px;color:var(--primary)" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/></svg><div style="font-size:11.5px;font-weight:600;margin-top:6px">Settlement</div></div>
-              <div onclick="tabTo('s-leads')" style="flex:1;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer"><svg style="width:24px;height:24px;color:var(--info)" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-5 9 5-9 5-9-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><div style="font-size:11.5px;font-weight:600;margin-top:6px">Admissions</div></div>
+            <div class=&quot;banner fade d3&quot; style=&quot;background:var(--primary-tint);margin-top:14px&quot;><svg style=&quot;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linejoin=&quot;round&quot;/></svg><div style=&quot;font-size:13px;color:var(--primary-deep);line-height:1.5&quot;><b>You receive 100% regardless of pending parents.</b> EduShield carries the collection risk — full ₹21,88,800 by the 15th.</div></div>
+
+            <div class=&quot;card fade d4&quot; style=&quot;margin-top:14px;cursor:pointer&quot; onclick=&quot;goView('s-plans')&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div class=&quot;eyebrow&quot;>Your EduShield plan</div><span class=&quot;chip green&quot;>Growth</span></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;align-items:flex-end;margin-top:10px&quot;>
+                <div><div style=&quot;font-size:13px&quot; class=&quot;muted&quot;>₹20 / student / month × 342</div><div style=&quot;font-size:22px;font-weight:800;color:var(--primary-deep);margin-top:2px&quot;>₹6,840<span style=&quot;font-size:13px;font-weight:600;color:var(--faint)&quot;>/mo</span></div></div>
+                <span class=&quot;chip gray&quot;>Billed separately ›</span>
+              </div>
+              <p class=&quot;faint&quot; style=&quot;font-size:11.5px;margin-top:10px;line-height:1.5&quot;>Your plan fee never touches parent settlements — students' fees always reach you in full.</p>
+            </div>
+
+            <div class=&quot;card fade d4&quot; style=&quot;margin-top:14px;cursor:pointer;background:linear-gradient(150deg,#FBF0D8,#fff)&quot; onclick=&quot;goView('s-sponsor')&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div class=&quot;eyebrow&quot;>Sponsor a child · CSR</div><span class=&quot;chip gold&quot;>New</span></div>
+              <div class=&quot;row&quot; style=&quot;gap:12px;margin-top:11px&quot;><div style=&quot;width:42px;height:42px;border-radius:12px;background:var(--gold-tint);display:grid;place-items:center;font-size:21px&quot;>🤝</div><div style=&quot;flex:1&quot;><b style=&quot;font-size:14.5px&quot;>12 students fully funded by sponsors</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>₹2,30,400 raised this year · 3 companies</div></div><svg style=&quot;width:18px;height:18px;color:var(--faint)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M9 6l6 6-6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></div>
+            </div>
+
+            <div class=&quot;eyebrow fade d5&quot; style=&quot;margin:22px 4px 10px&quot;>Today's activity</div>
+            <div class=&quot;group fade d5&quot; id=&quot;feed&quot;>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>✓</div><div class=&quot;tx&quot;><b>Diya Gupta · Cl. 3-A paid</b><small>UPI · 9:12 AM</small></div><b style=&quot;font-size:13.5px&quot;>₹6,400</b></div>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--info-tint);color:var(--info)&quot;>💬</div><div class=&quot;tx&quot;><b>18 WhatsApp reminders delivered</b><small>8:40 AM</small></div></div>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--gold-tint);color:var(--gold)&quot;>🎓</div><div class=&quot;tx&quot;><b>New admission lead · Cl. 2</b><small>8:05 AM</small></div></div>
             </div>
           </div>
         </div>
 
-        <!-- FEES (interactive reminders) -->
-        <div class="view" data-view="s-fees">
-          <div class="pad">
-            <div class="lt"><h1>Fee status</h1><p>342 students · June 2026</p></div>
-            <div class="iseg"><button class="on" onclick="sFeeTab(this)">All</button><button onclick="sFeeTab(this)">Paid</button><button onclick="sFeeTab(this)">Pending</button><button onclick="sFeeTab(this)">Overdue</button></div>
-            <div class="banner" style="background:var(--gold-tint);margin-bottom:14px"><svg style="color:var(--gold)" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div style="font-size:12.5px;color:#7a5a12;line-height:1.45">43 pending · 8 overdue. Nudge parents in one tap — your settlement is guaranteed either way.</div></div>
-            <button class="btn dark" style="margin-bottom:14px;padding:14px" onclick="remindAll()">Send WhatsApp reminder to all pending</button>
-            <div class="group">
-              <div class="frow"><div class="av sm gold">RK</div><div class="nm"><b>Riya Kapoor · Cl. 6-A</b><small>₹6,400 · due 10 Jun</small></div><button class="mini" onclick="remind(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z"/></svg>Remind</button></div>
-              <div class="frow"><div class="av sm gold">AM</div><div class="nm"><b>Arjun Mehta · Cl. 4-B</b><small>₹6,400 · due 10 Jun</small></div><button class="mini" onclick="remind(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z"/></svg>Remind</button></div>
-              <div class="frow"><div class="av sm" style="background:var(--danger)">SV</div><div class="nm"><b>Sara Verma · Cl. 8-C</b><small style="color:var(--danger)">₹6,400 · overdue 12 days</small></div><button class="mini" onclick="remind(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z"/></svg>Remind</button></div>
-              <div class="frow"><div class="av sm" style="background:var(--primary)">IN</div><div class="nm"><b>Ishaan Nair · Cl. 5-B</b><small>Paid · 8 Jun</small></div><span class="chip green"><span class="dot"></span>Paid</span></div>
-              <div class="frow"><div class="av sm" style="background:var(--primary)">DG</div><div class="nm"><b>Diya Gupta · Cl. 3-A</b><small>Paid · 5 Jun</small></div><span class="chip green"><span class="dot"></span>Paid</span></div>
+        <!-- FEES -->
+        <div class=&quot;view&quot; data-view=&quot;s-fees&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Fee status</h1><p>342 students · June 2026</p></div>
+            <div class=&quot;search&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;/><path d=&quot;M20 20l-3-3&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg><input id=&quot;feeSearch&quot; placeholder=&quot;Search student or class…&quot; oninput=&quot;filterFees()&quot;></div>
+            <div class=&quot;iseg&quot;><button class=&quot;on&quot; data-f=&quot;all&quot; onclick=&quot;setFilter(this)&quot;>All</button><button data-f=&quot;paid&quot; onclick=&quot;setFilter(this)&quot;>Paid</button><button data-f=&quot;pending&quot; onclick=&quot;setFilter(this)&quot;>Pending</button><button data-f=&quot;overdue&quot; onclick=&quot;setFilter(this)&quot;>Overdue</button></div>
+            <button class=&quot;btn wa&quot; style=&quot;margin-bottom:14px&quot; onclick=&quot;remindAll()&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z&quot;/></svg>Remind all pending on WhatsApp</button>
+            <div class=&quot;group&quot; id=&quot;feeList&quot;>
+              <div class=&quot;frow&quot; data-status=&quot;pending&quot; data-name=&quot;riya kapoor&quot;><div class=&quot;av sm gold&quot;>RK</div><div class=&quot;nm&quot;><b>Riya Kapoor · Cl. 6-A</b><small>₹6,400 · due 10 Jun</small></div><button class=&quot;mini&quot; onclick=&quot;remind(this)&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z&quot;/></svg>Remind</button></div>
+              <div class=&quot;frow&quot; data-status=&quot;pending&quot; data-name=&quot;arjun mehta&quot;><div class=&quot;av sm gold&quot;>AM</div><div class=&quot;nm&quot;><b>Arjun Mehta · Cl. 4-B</b><small>₹6,400 · due 10 Jun</small></div><button class=&quot;mini&quot; onclick=&quot;remind(this)&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z&quot;/></svg>Remind</button></div>
+              <div class=&quot;frow&quot; data-status=&quot;overdue&quot; data-name=&quot;sara verma&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--danger)&quot;>SV</div><div class=&quot;nm&quot;><b>Sara Verma · Cl. 8-C</b><small style=&quot;color:var(--danger)&quot;>₹6,400 · overdue 12 days</small></div><button class=&quot;mini&quot; onclick=&quot;remind(this)&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z&quot;/></svg>Remind</button></div>
+              <div class=&quot;frow&quot; data-status=&quot;overdue&quot; data-name=&quot;kabir shah&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--danger)&quot;>KS</div><div class=&quot;nm&quot;><b>Kabir Shah · Cl. 7-B</b><small style=&quot;color:var(--danger)&quot;>₹6,400 · overdue 6 days</small></div><button class=&quot;mini&quot; onclick=&quot;remind(this)&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M12 2a10 10 0 0 0-8.7 15l-1.3 4 4.1-1.3A10 10 0 1 0 12 2z&quot;/></svg>Remind</button></div>
+              <div class=&quot;frow&quot; data-status=&quot;paid&quot; data-name=&quot;ishaan nair&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--primary)&quot;>IN</div><div class=&quot;nm&quot;><b>Ishaan Nair · Cl. 5-B</b><small>Paid · 8 Jun</small></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Paid</span></div>
+              <div class=&quot;frow&quot; data-status=&quot;paid&quot; data-name=&quot;diya gupta&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--primary)&quot;>DG</div><div class=&quot;nm&quot;><b>Diya Gupta · Cl. 3-A</b><small>Paid · 5 Jun</small></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Paid</span></div>
+              <div class=&quot;frow&quot; data-status=&quot;paid&quot; data-name=&quot;aarav sharma&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--primary)&quot;>AS</div><div class=&quot;nm&quot;><b>Aarav Sharma · Cl. 5-B</b><small>Paid · 4 Jun</small></div><span class=&quot;chip green&quot;><span class=&quot;dot&quot;></span>Paid</span></div>
             </div>
+            <p class=&quot;faint&quot; id=&quot;feeEmpty&quot; style=&quot;display:none;text-align:center;font-size:13px;margin-top:24px&quot;>No students match.</p>
           </div>
         </div>
 
         <!-- SETTLEMENT -->
-        <div class="view" data-view="s-settle">
-          <div class="pad">
-            <div class="lt"><h1>Settlement</h1><p>June 2026 cycle</p></div>
-            <div class="card" style="background:linear-gradient(150deg,#0E7A59,#0A5A41);color:#fff">
-              <div style="opacity:.8;font-size:13px">Settling to your account</div>
-              <div class="amt" data-count="2188800" style="margin:4px 0">₹0</div>
-              <span class="chip" style="background:rgba(255,255,255,.16);color:#fff"><span class="dot" style="background:#7BE0B4"></span>Scheduled · 15 Jun 2026</span>
+        <div class=&quot;view&quot; data-view=&quot;s-settle&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Settlement</h1><p>June 2026 cycle</p></div>
+            <div class=&quot;card&quot; style=&quot;background:linear-gradient(150deg,#0E7A59,#0A5A41);color:#fff&quot;>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between&quot;><div style=&quot;opacity:.8;font-size:13px&quot;>Settling to your account</div><span class=&quot;chip&quot; style=&quot;background:rgba(255,255,255,.16);color:#fff&quot;><span class=&quot;dot&quot; style=&quot;background:#7BE0B4&quot;></span>in 9 days</span></div>
+              <div class=&quot;amt&quot; data-count=&quot;2188800&quot; style=&quot;margin:6px 0 2px&quot;>₹0</div>
+              <div style=&quot;opacity:.85;font-size:13px&quot;>HDFC Bank ••6721 · scheduled 15 Jun 2026</div>
             </div>
-            <div class="card" style="margin-top:14px">
-              <div class="eyebrow" style="margin-bottom:12px">How your money flows</div>
-              <div class="row" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)"><span class="muted" style="font-size:13.5px">Total student fees (342)</span><b>₹21,88,800</b></div>
-              <div class="row" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)"><span class="muted" style="font-size:13.5px">Collected from parents</span><b>₹18,60,480</b></div>
-              <div class="row" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)"><span class="muted" style="font-size:13.5px">Pending — covered by EduShield</span><b style="color:var(--primary)">₹3,28,320</b></div>
-              <div class="row" style="justify-content:space-between;padding:11px 0 4px"><b style="font-size:14.5px">You receive (100%)</b><b style="font-size:17px;color:var(--primary-deep)">₹21,88,800</b></div>
+            <div class=&quot;card&quot; style=&quot;margin-top:14px&quot;>
+              <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:12px&quot;>How your money flows</div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)&quot;><span class=&quot;muted&quot; style=&quot;font-size:13.5px&quot;>Total student fees (342)</span><b>₹21,88,800</b></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)&quot;><span class=&quot;muted&quot; style=&quot;font-size:13.5px&quot;>Collected from parents</span><b>₹18,60,480</b></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)&quot;><span class=&quot;muted&quot; style=&quot;font-size:13.5px&quot;>Pending — covered by EduShield</span><b style=&quot;color:var(--primary)&quot;>₹3,28,320</b></div>
+              <div class=&quot;row&quot; style=&quot;justify-content:space-between;padding:11px 0 4px&quot;><b style=&quot;font-size:14.5px&quot;>You receive (100%)</b><b style=&quot;font-size:17px;color:var(--primary-deep)&quot;>₹21,88,800</b></div>
             </div>
-            <div class="banner" style="background:#EEF1EE;margin-top:12px"><svg style="color:var(--muted)" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div style="font-size:12px;color:var(--muted);line-height:1.5">Your EduShield <b>Growth plan fee (₹6,840)</b> is invoiced separately — it is never deducted from this settlement.</div></div>
-            <div class="eyebrow" style="margin:22px 4px 10px">Settlement timeline</div>
-            <div class="card"><div class="tl">
-              <div class="step done"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div><b>Fees collected & assured</b><small>1–14 Jun</small></div>
-              <div class="step active"><div class="node"></div><b>Reconciliation</b><small>EduShield verifies all 342 students</small></div>
-              <div class="step"><div class="node"></div><b>Settlement to school</b><small>By 15 Jun · full ₹21,88,800</small></div>
+            <div class=&quot;banner&quot; style=&quot;background:#EEF1EE;margin-top:12px&quot;><svg style=&quot;color:var(--muted)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/><path d=&quot;M12 8v5M12 16h.01&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg><div style=&quot;font-size:12px;color:var(--muted);line-height:1.5&quot;>Your <b>Growth plan fee (₹6,840)</b> is invoiced separately — never deducted from this settlement.</div></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Settlement timeline</div>
+            <div class=&quot;card&quot;><div class=&quot;tl&quot;>
+              <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>Fees collected &amp; assured</b><small>1–14 Jun</small></div>
+              <div class=&quot;step active&quot;><div class=&quot;node&quot;></div><b>Reconciliation</b><small>Verifying all 342 students</small></div>
+              <div class=&quot;step&quot;><div class=&quot;node&quot;></div><b>Settlement to school</b><small>By 15 Jun · full ₹21,88,800</small></div>
             </div></div>
-            <div class="eyebrow" style="margin:22px 4px 10px">Past settlements</div>
-            <div class="group">
-              <div class="li"><div class="ic" style="background:var(--primary-tint);color:var(--primary)">✓</div><div class="tx"><b>May 2026</b><small>Settled 15 May · 100%</small></div><b>₹21,76,000</b></div>
-              <div class="li"><div class="ic" style="background:var(--primary-tint);color:var(--primary)">✓</div><div class="tx"><b>April 2026</b><small>Settled 15 Apr · 100%</small></div><b>₹21,50,400</b></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Past settlements</div>
+            <div class=&quot;group&quot;>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>✓</div><div class=&quot;tx&quot;><b>May 2026</b><small>Settled 15 May · 100%</small></div><b>₹21,76,000</b></div>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>✓</div><div class=&quot;tx&quot;><b>April 2026</b><small>Settled 15 Apr · 100%</small></div><b>₹21,50,400</b></div>
             </div>
-            <button class="btn ghost" style="margin-top:16px" onclick="alert('Demo: settlement statement (PDF) downloaded.')">Download statement</button>
+            <button class=&quot;btn ghost&quot; style=&quot;margin-top:16px&quot; onclick=&quot;toast('Settlement statement (PDF) downloaded.')&quot;>Download statement</button>
           </div>
         </div>
 
-        <!-- LEADS / ADMISSIONS -->
-        <div class="view" data-view="s-leads">
-          <div class="pad">
-            <div class="lt"><h1>Admissions</h1><p>Leads from nearby parents</p></div>
-            <div class="card">
-              <div class="eyebrow" style="margin-bottom:12px">This month's funnel</div>
-              <div class="funnel">
-                <div class="fbar" style="background:linear-gradient(90deg,#2D6E8E,#1e5066)"><span>Profile views</span><span data-count="1284">0</span></div>
-                <div class="fbar" style="background:linear-gradient(90deg,#0E7A59,#0A5A41);width:78%"><span>Enquiries</span><span data-count="96">0</span></div>
-                <div class="fbar" style="background:linear-gradient(90deg,#E0A93B,#C98A1E);width:52%"><span>Admitted</span><span data-count="31">0</span></div>
+        <!-- LEADS -->
+        <div class=&quot;view&quot; data-view=&quot;s-leads&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Admissions</h1><p>Leads from nearby parents</p></div>
+            <div class=&quot;card&quot;>
+              <div class=&quot;eyebrow&quot; style=&quot;margin-bottom:12px&quot;>This month's funnel</div>
+              <div class=&quot;funnel&quot;>
+                <div class=&quot;fbar&quot; style=&quot;background:linear-gradient(90deg,#2D6E8E,#1e5066)&quot;><span>Profile views</span><span data-count=&quot;1284&quot;>0</span></div>
+                <div class=&quot;fbar&quot; style=&quot;background:linear-gradient(90deg,#0E7A59,#0A5A41);width:78%&quot;><span>Enquiries</span><span data-count=&quot;96&quot;>0</span></div>
+                <div class=&quot;fbar&quot; style=&quot;background:linear-gradient(90deg,#E0A93B,#C98A1E);width:52%&quot;><span>Admitted</span><span data-count=&quot;31&quot;>0</span></div>
               </div>
-              <p class="faint" style="font-size:11.5px;margin-top:12px">31 new admissions this month — each one also becomes an assured-fee, protected student.</p>
+              <p class=&quot;faint&quot; style=&quot;font-size:11.5px;margin-top:12px&quot;>31 admissions this month — each also becomes an assured-fee, protected student.</p>
             </div>
-            <div class="eyebrow" style="margin:22px 4px 10px">New leads</div>
-            <div class="group">
-              <div class="frow"><div class="av sm gold">PT</div><div class="nm"><b>Priya Tandon</b><small>Looking for Cl. 2 · CBSE · 2 km away</small></div><button class="mini" style="background:var(--primary)" onclick="contactLead(this)">Contact</button></div>
-              <div class="frow"><div class="av sm" style="background:var(--info)">VR</div><div class="nm"><b>Vikram Rao</b><small>Looking for Cl. 6 · 3.5 km away</small></div><button class="mini" style="background:var(--primary)" onclick="contactLead(this)">Contact</button></div>
-              <div class="frow"><div class="av sm" style="background:linear-gradient(135deg,#0E7A59,#0A5A41)">NS</div><div class="nm"><b>Neha Singh</b><small>Looking for Cl. 1 · nearby</small></div><button class="mini" style="background:var(--primary)" onclick="contactLead(this)">Contact</button></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>New leads</div>
+            <div class=&quot;group&quot;>
+              <div class=&quot;frow&quot;><div class=&quot;av sm gold&quot;>PT</div><div class=&quot;nm&quot;><b>Priya Tandon</b><small>Cl. 2 · CBSE · 2 km away</small></div><button class=&quot;mini&quot; style=&quot;background:var(--primary)&quot; onclick=&quot;contactLead(this)&quot;>Contact</button></div>
+              <div class=&quot;frow&quot;><div class=&quot;av sm&quot; style=&quot;background:var(--info)&quot;>VR</div><div class=&quot;nm&quot;><b>Vikram Rao</b><small>Cl. 6 · 3.5 km away</small></div><button class=&quot;mini&quot; style=&quot;background:var(--primary)&quot; onclick=&quot;contactLead(this)&quot;>Contact</button></div>
+              <div class=&quot;frow&quot;><div class=&quot;av sm&quot; style=&quot;background:linear-gradient(135deg,#0E7A59,#0A5A41)&quot;>NS</div><div class=&quot;nm&quot;><b>Neha Singh</b><small>Cl. 1 · nearby</small></div><button class=&quot;mini&quot; style=&quot;background:var(--primary)&quot; onclick=&quot;contactLead(this)&quot;>Contact</button></div>
             </div>
-            <button class="btn gold" style="margin-top:16px" onclick="alert('Demo: your school is now boosted in parent search for 30 days.')">Boost school in parent search</button>
+            <button class=&quot;btn gold&quot; style=&quot;margin-top:16px&quot; onclick=&quot;toast('Your school is now boosted in parent search for 30 days.')&quot;>Boost school in parent search</button>
           </div>
         </div>
 
         <!-- CASES -->
-        <div class="view" data-view="s-cases">
-          <div class="pad">
-            <div class="lt"><h1>Continuity</h1><p>Protected students at your school</p></div>
-            <div class="statgrid" style="grid-template-columns:1fr 1fr">
-              <div class="statbox"><div class="k">Protected</div><div class="v" style="color:var(--primary)" data-count="318">0</div></div>
-              <div class="statbox"><div class="k">Active cases</div><div class="v" style="color:var(--gold)">1</div></div>
+        <div class=&quot;view&quot; data-view=&quot;s-cases&quot;>
+          <div class=&quot;pad&quot;>
+            <div class=&quot;lt&quot;><h1>Continuity</h1><p>Protected students at your school</p></div>
+            <div class=&quot;statgrid&quot; style=&quot;grid-template-columns:1fr 1fr&quot;>
+              <div class=&quot;statbox&quot; style=&quot;cursor:default&quot;><div class=&quot;k&quot;>Protected</div><div class=&quot;v&quot; style=&quot;color:var(--primary)&quot; data-count=&quot;318&quot;>0</div></div>
+              <div class=&quot;statbox&quot; style=&quot;cursor:default&quot;><div class=&quot;k&quot;>Active cases</div><div class=&quot;v&quot; style=&quot;color:var(--gold)&quot;>1</div></div>
             </div>
-            <div class="eyebrow" style="margin:22px 4px 10px">Active continuity case</div>
-            <div class="card">
-              <div class="row" style="gap:12px"><div class="av sm gold">KS</div><div style="flex:1"><b style="font-size:15px">Kabir Saxena · Cl. 7-A</b><div class="faint" style="font-size:12px">Guardian claim · opened 20 May</div></div><span class="chip gold"><span class="dot"></span>In progress</span></div>
-              <div class="banner" style="background:var(--primary-tint);margin-top:14px"><svg style="color:var(--primary)" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z" stroke="currentColor" stroke-width="1.8"/></svg><div style="font-size:12.5px;color:var(--primary-deep);line-height:1.5">EduShield is funding Kabir's fees directly. <b>No action needed from your office</b> — he stays enrolled and the school is paid as usual.</div></div>
-              <div class="tl" style="margin-top:16px">
-                <div class="step done"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div><b>Family raised request</b><small>20 May</small></div>
-                <div class="step done"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div><b>EduShield verified & approved</b><small>23 May</small></div>
-                <div class="step active"><div class="node"></div><b>Fees funded by EduShield</b><small>Through Class 12</small></div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Active continuity case</div>
+            <div class=&quot;card&quot;>
+              <div class=&quot;row&quot; style=&quot;gap:12px&quot;><div class=&quot;av sm gold&quot;>KS</div><div style=&quot;flex:1&quot;><b style=&quot;font-size:15px&quot;>Kabir Saxena · Cl. 7-A</b><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>Guardian claim · opened 20 May</div></div><span class=&quot;chip gold&quot;><span class=&quot;dot&quot;></span>In progress</span></div>
+              <div class=&quot;banner&quot; style=&quot;background:var(--primary-tint);margin-top:14px&quot;><svg style=&quot;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;/></svg><div style=&quot;font-size:12.5px;color:var(--primary-deep);line-height:1.5&quot;>EduShield is funding Kabir's fees directly. <b>No action needed from your office</b> — he stays enrolled and the school is paid as usual.</div></div>
+              <div class=&quot;tl&quot; style=&quot;margin-top:16px&quot;>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>Family raised request</b><small>20 May</small></div>
+                <div class=&quot;step done&quot;><div class=&quot;node&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg></div><b>EduShield verified &amp; approved</b><small>23 May</small></div>
+                <div class=&quot;step active&quot;><div class=&quot;node&quot;></div><b>Fees funded by EduShield</b><small>Through Class 12</small></div>
               </div>
             </div>
-            <p class="faint" style="font-size:11px;text-align:center;margin-top:16px;line-height:1.5;padding:0 6px">Continuity is partner-backed via a licensed insurer partner. Cases shown are illustrative. Prototype build.</p>
+            <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:16px;line-height:1.5;padding:0 6px&quot;>Continuity is partner-backed via a licensed insurer partner. Cases shown are illustrative. Prototype build.</p>
           </div>
         </div>
 
-        <!-- PLANS & PRICING (the business model) -->
-        <div class="view" data-view="s-plans">
-          <div class="nav"><button class="back" onclick="tabTo('s-home')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="ttl">Plans & pricing</div></div>
-          <div class="pad" style="padding-top:4px">
-            <p class="muted" style="font-size:13.5px;margin-bottom:16px;line-height:1.5">Priced per student, per month. Parent fees always settle to you at 100% — plans are billed separately.</p>
-            <div class="plan">
-              <div class="ph"><div><div class="pn">Payments</div><div class="faint" style="font-size:12px">Get paid, on time</div></div><div class="pp">₹12<small>/student/mo</small></div></div>
+        <!-- SPONSORSHIP -->
+        <div class=&quot;view&quot; data-view=&quot;s-sponsor&quot;>
+          <div class=&quot;nav&quot;><button class=&quot;back&quot; onclick=&quot;tabTo('s-home')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M15 6l-6 6 6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></button><div class=&quot;ttl&quot;>Sponsor a Child</div></div>
+          <div class=&quot;pad&quot; style=&quot;padding-top:4px&quot;>
+            <div class=&quot;hero&quot; style=&quot;background:linear-gradient(150deg,#C98A1E,#9c6a13)&quot;>
+              <svg class=&quot;wm&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z&quot; fill=&quot;#fff&quot;/></svg>
+              <div class=&quot;eyebrow&quot; style=&quot;color:rgba(255,255,255,.75);position:relative&quot;>Corporate &amp; alumni CSR</div>
+              <div style=&quot;font-size:19px;font-weight:800;margin-top:8px;position:relative;line-height:1.3&quot;>Turn deserving students into funded futures.</div>
+              <div style=&quot;opacity:.9;font-size:13px;margin-top:8px;position:relative&quot;>Sponsors pay fees directly through your school — verified and tracked by EduShield.</div>
+            </div>
+            <div class=&quot;statgrid&quot; style=&quot;grid-template-columns:1fr 1fr 1fr;margin-top:14px&quot;>
+              <div class=&quot;statbox&quot; style=&quot;cursor:default&quot;><div class=&quot;k&quot;>Funded</div><div class=&quot;v&quot; style=&quot;color:var(--gold)&quot; data-count=&quot;12&quot;>0</div></div>
+              <div class=&quot;statbox&quot; style=&quot;cursor:default&quot;><div class=&quot;k&quot;>Sponsors</div><div class=&quot;v&quot; style=&quot;color:var(--primary)&quot; data-count=&quot;3&quot;>0</div></div>
+              <div class=&quot;statbox&quot; style=&quot;cursor:default&quot;><div class=&quot;k&quot;>Raised</div><div class=&quot;v&quot; style=&quot;color:var(--ink);font-size:16px;margin-top:8px&quot; data-count=&quot;230400&quot;>₹0</div></div>
+            </div>
+            <div class=&quot;eyebrow&quot; style=&quot;margin:22px 4px 10px&quot;>Active sponsorships</div>
+            <div class=&quot;group&quot;>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--info-tint);color:var(--info);font-size:13px;font-weight:800&quot;>TC</div><div class=&quot;tx&quot;><b>TechCorp Foundation</b><small>Funding 6 students · Cl. 3–8</small></div><b style=&quot;font-size:13.5px;color:var(--primary)&quot;>₹1,15,200</b></div>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--gold-tint);color:var(--gold);font-size:13px;font-weight:800&quot;>AL</div><div class=&quot;tx&quot;><b>Alumni Batch of '02</b><small>Funding 4 students · Cl. 5–10</small></div><b style=&quot;font-size:13.5px;color:var(--primary)&quot;>₹76,800</b></div>
+              <div class=&quot;li&quot;><div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary);font-size:13px;font-weight:800&quot;>GS</div><div class=&quot;tx&quot;><b>GreenStart Pvt Ltd</b><small>Funding 2 students · Cl. 2–4</small></div><b style=&quot;font-size:13.5px;color:var(--primary)&quot;>₹38,400</b></div>
+            </div>
+            <div class=&quot;banner&quot; style=&quot;background:var(--primary-tint);margin-top:14px&quot;><svg style=&quot;color:var(--primary)&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;/></svg><div style=&quot;font-size:12.5px;color:var(--primary-deep);line-height:1.5&quot;>Sponsored fees settle to you like any other — <b>100%, by the 15th</b>. EduShield handles sponsor matching, receipts and 80G tax proof.</div></div>
+            <button class=&quot;btn gold&quot; style=&quot;margin-top:16px&quot; onclick=&quot;toast('Demo: your sponsorship page link is ready to share with companies &amp; alumni.')&quot;>Invite a sponsor</button>
+            <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:12px;line-height:1.5&quot;>EduShield earns a small platform fee on sponsored funds. Illustrative figures · prototype build.</p>
+          </div>
+        </div>
+
+        <!-- PLANS -->
+        <div class=&quot;view&quot; data-view=&quot;s-plans&quot;>
+          <div class=&quot;nav&quot;><button class=&quot;back&quot; onclick=&quot;tabTo('s-home')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M15 6l-6 6 6 6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg></button><div class=&quot;ttl&quot;>Plans &amp; pricing</div></div>
+          <div class=&quot;pad&quot; style=&quot;padding-top:4px&quot;>
+            <p class=&quot;muted&quot; style=&quot;font-size:13.5px;margin-bottom:16px;line-height:1.5&quot;>Priced per student, per month. Parent fees always settle to you at 100% — plans are billed separately.</p>
+            <div class=&quot;plan&quot;>
+              <div class=&quot;ph&quot;><div><div class=&quot;pn&quot;>Payments</div><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>Get paid, on time</div></div><div class=&quot;pp&quot;>₹12<small>/student/mo</small></div></div>
               <ul>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>UPI / card / netbanking collection</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>WhatsApp reminders & receipts</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Live dashboard & reports</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>UPI / card / netbanking collection</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>WhatsApp reminders &amp; receipts</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>Live dashboard &amp; reports</li>
               </ul>
             </div>
-            <div class="plan cur">
-              <div class="ph"><div><div class="pn">Growth <span class="chip green" style="margin-left:6px">Current</span></div><div class="faint" style="font-size:12px">Assured cashflow + admissions</div></div><div class="pp">₹20<small>/student/mo</small></div></div>
+            <div class=&quot;plan cur&quot;>
+              <div class=&quot;ph&quot;><div><div class=&quot;pn&quot;>Growth <span class=&quot;chip green&quot; style=&quot;margin-left:6px&quot;>Current</span></div><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>Assured cashflow + admissions</div></div><div class=&quot;pp&quot;>₹20<small>/student/mo</small></div></div>
               <ul>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Everything in Payments</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><b>100% fee assurance by the 15th</b></li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Admissions leads & search boost</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>School store commission</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>Everything in Payments</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg><b>100% fee assurance by the 15th</b></li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>Admissions leads &amp; search boost</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>School store commission</li>
               </ul>
             </div>
-            <div class="plan">
-              <div class="ph"><div><div class="pn">Continuity</div><div class="faint" style="font-size:12px">Full family protection</div></div><div class="pp">₹32<small>/student/mo</small></div></div>
+            <div class=&quot;plan&quot;>
+              <div class=&quot;ph&quot;><div><div class=&quot;pn&quot;>Continuity</div><div class=&quot;faint&quot; style=&quot;font-size:12px&quot;>Full family protection</div></div><div class=&quot;pp&quot;>₹32<small>/student/mo</small></div></div>
               <ul>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Everything in Growth</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Education continuity for every student</li>
-                <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>24×7 family support desk</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>Everything in Growth</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>Education continuity for every student</li>
+                <li><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; stroke-linecap=&quot;round&quot;/></svg>24×7 family support desk</li>
               </ul>
             </div>
-            <button class="btn" style="margin-top:6px" onclick="alert('Demo: upgrade request sent to your EduShield partner manager.')">Upgrade to Continuity</button>
-            <p class="faint" style="font-size:11px;text-align:center;margin-top:12px;line-height:1.5">Illustrative pricing for demo. Lending is via an NBFC partner; continuity via a licensed insurer partner.</p>
+            <button class=&quot;btn&quot; style=&quot;margin-top:6px&quot; onclick=&quot;toast('Upgrade request sent to your EduShield partner manager.')&quot;>Upgrade to Continuity</button>
+            <p class=&quot;faint&quot; style=&quot;font-size:11px;text-align:center;margin-top:12px;line-height:1.5&quot;>Illustrative pricing for demo. Lending via NBFC partner; continuity via licensed insurer partner.</p>
           </div>
         </div>
 
       </div>
-      <div class="tabbar" id="schoolTabs">
-        <button class="tab on" data-t="s-home" onclick="tabTo('s-home')"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="2" stroke="currentColor"/><rect x="13" y="4" width="7" height="7" rx="2" stroke="currentColor"/><rect x="4" y="13" width="7" height="7" rx="2" stroke="currentColor"/><rect x="13" y="13" width="7" height="7" rx="2" stroke="currentColor"/></svg><span>Overview</span></button>
-        <button class="tab" data-t="s-fees" onclick="tabTo('s-fees')"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M5 12h14M5 17h9" stroke="currentColor" stroke-linecap="round"/></svg><span>Fees</span></button>
-        <button class="tab" data-t="s-settle" onclick="tabTo('s-settle')"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor"/><path d="M3 10h18" stroke="currentColor"/></svg><span>Settle</span></button>
-        <button class="tab" data-t="s-leads" onclick="tabTo('s-leads')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-5 9 5-9 5-9-5z" stroke="currentColor" stroke-linejoin="round"/><path d="M7 11v4c0 1 2.2 2 5 2s5-1 5-2v-4" stroke="currentColor"/></svg><span>Leads</span></button>
-        <button class="tab" data-t="s-cases" onclick="tabTo('s-cases')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z" stroke="currentColor" stroke-linejoin="round"/></svg><span>Cases</span></button>
+      <div class=&quot;tabbar&quot; id=&quot;schoolTabs&quot;>
+        <button class=&quot;tab on&quot; data-t=&quot;s-home&quot; onclick=&quot;tabTo('s-home')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><rect x=&quot;4&quot; y=&quot;4&quot; width=&quot;7&quot; height=&quot;7&quot; rx=&quot;2&quot; stroke=&quot;currentColor&quot;/><rect x=&quot;13&quot; y=&quot;4&quot; width=&quot;7&quot; height=&quot;7&quot; rx=&quot;2&quot; stroke=&quot;currentColor&quot;/><rect x=&quot;4&quot; y=&quot;13&quot; width=&quot;7&quot; height=&quot;7&quot; rx=&quot;2&quot; stroke=&quot;currentColor&quot;/><rect x=&quot;13&quot; y=&quot;13&quot; width=&quot;7&quot; height=&quot;7&quot; rx=&quot;2&quot; stroke=&quot;currentColor&quot;/></svg><span>Overview</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;s-fees&quot; onclick=&quot;tabTo('s-fees')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 7h14M5 12h14M5 17h9&quot; stroke=&quot;currentColor&quot; stroke-linecap=&quot;round&quot;/></svg><span>Fees</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;s-settle&quot; onclick=&quot;tabTo('s-settle')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><rect x=&quot;3&quot; y=&quot;6&quot; width=&quot;18&quot; height=&quot;13&quot; rx=&quot;2.5&quot; stroke=&quot;currentColor&quot;/><path d=&quot;M3 10h18&quot; stroke=&quot;currentColor&quot;/></svg><span>Settle</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;s-leads&quot; onclick=&quot;tabTo('s-leads')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M3 9l9-5 9 5-9 5-9-5z&quot; stroke=&quot;currentColor&quot; stroke-linejoin=&quot;round&quot;/><path d=&quot;M7 11v4c0 1 2.2 2 5 2s5-1 5-2v-4&quot; stroke=&quot;currentColor&quot;/></svg><span>Leads</span></button>
+        <button class=&quot;tab&quot; data-t=&quot;s-cases&quot; onclick=&quot;tabTo('s-cases')&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M12 3l7 2.5V11c0 4.5-3 8-7 9.5C8 19 5 15.5 5 11V5.5L12 3z&quot; stroke=&quot;currentColor&quot; stroke-linejoin=&quot;round&quot;/></svg><span>Cases</span></button>
       </div>
     </div>
+
+    <div class=&quot;toast&quot; id=&quot;toast&quot;><svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot;><path d=&quot;M5 13l4 4L19 7&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/></svg><b id=&quot;toastMsg&quot;></b></div>
 
   </div>
 </div></div>
@@ -328,16 +930,108 @@ body{font-family:var(--sf);background:#161b18;background-image:radial-gradient(c
 function $(s,c){return (c||document).querySelector(s)}
 function $all(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))}
 function inr(n){n=Math.round(n);var s=String(n),l3=s.slice(-3),r=s.slice(0,-3);if(r)l3=','+l3;r=r.replace(/\B(?=(\d{2})+(?!\d))/g,',');return '\u20B9'+r+l3;}
+var liveDone=false, tT;
 window.addEventListener('load',function(){ setTimeout(function(){ $('#splash').classList.add('gone'); },2000); animate('s-home'); });
-function countUp(el){ var t=parseInt(el.dataset.count,10),isMoney=el.textContent.indexOf('\u20B9')>-1||t>9999,dur=1000,st=null; function step(ts){ if(!st)st=ts; var p=Math.min((ts-st)/dur,1),val=Math.floor(t*(1-Math.pow(1-p,3))); el.textContent=isMoney?inr(val):val; if(p<1)requestAnimationFrame(step); } requestAnimationFrame(step); }
-function animate(v){ var av=$('.view[data-view="'+v+'"]'); if(!av)return; $all('[data-count]',av).forEach(function(e){ e.dataset.done=''; countUp(e); }); if(v==='s-home') setTimeout(function(){ var b=$('#collBar'); if(b)b.style.width='85%'; },250); }
+
+function countUp(el){ var t=parseInt(el.dataset.count,10),money=t>9999,dur=1000,st=null; function step(ts){ if(!st)st=ts; var p=Math.min((ts-st)/dur,1),v=Math.floor(t*(1-Math.pow(1-p,3))); el.textContent=money?inr(v):v; if(p<1)requestAnimationFrame(step); } requestAnimationFrame(step); }
+function animate(v){
+  var av=$('.view[data-view=&quot;'+v+'&quot;]'); if(!av)return;
+  $all('[data-count]',av).forEach(countUp);
+  if(v==='s-home'){
+    setTimeout(function(){ var b=$('#collBar'); if(b)b.style.width='85%'; $all('.chart .bar').forEach(function(bar){ bar.style.height=bar.dataset.h+'%'; }); },250);
+    if(!liveDone){ liveDone=true; setTimeout(livePayment,3600); }
+  }
+}
 function goView(v){ $all('#schoolApp .view').forEach(function(el){ el.classList.toggle('active', el.dataset.view===v); }); var vp=$('#sViewport'); if(vp) vp.scrollTop=0; animate(v); }
 function tabTo(v){ goView(v); $all('#schoolTabs .tab').forEach(function(t){ t.classList.toggle('on', t.dataset.t===v); }); }
-function sFeeTab(b){ $all('.iseg button',b.parentNode).forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }
-function remind(btn){ if(btn.classList.contains('sent'))return; btn.classList.add('sent'); btn.innerHTML='Sent \u2713'; }
-function remindAll(){ $all('.frow .mini').forEach(function(b){ if(!b.classList.contains('sent')){ b.classList.add('sent'); b.innerHTML='Sent \u2713'; } }); alert('Demo: WhatsApp reminder sent to all 43 pending parents.'); }
-function contactLead(btn){ btn.textContent='Contacted \u2713'; btn.style.background='var(--primary-tint)'; btn.style.color='var(--primary-deep)'; }
-function restart(){ goView('s-home'); $all('#schoolTabs .tab').forEach(function(t){t.classList.toggle('on',t.dataset.t==='s-home')}); $('#splash').classList.remove('gone'); setTimeout(function(){ $('#splash').classList.add('gone'); },1500); }
+function openFees(status){ tabTo('s-fees'); var btn=$('.iseg button[data-f=&quot;'+status+'&quot;]'); if(btn) setFilter(btn); }
+
+function toast(msg){ $('#toastMsg').textContent=msg; var t=$('#toast'); t.classList.add('on'); clearTimeout(tT); tT=setTimeout(function(){ t.classList.remove('on'); },2600); }
+
+function setFilter(b){ $all('.iseg button',b.parentNode).forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); filterFees(); }
+function filterFees(){
+  var f=$('.iseg button.on').dataset.f, q=$('#feeSearch').value.toLowerCase().trim(), shown=0;
+  $all('#feeList .frow').forEach(function(r){
+    var ok=(f==='all'||r.dataset.status===f) &amp;&amp; (!q||r.dataset.name.indexOf(q)>-1);
+    r.style.display=ok?'flex':'none'; if(ok)shown++;
+  });
+  $('#feeEmpty').style.display=shown?'none':'block';
+}
+function remind(btn){ if(btn.classList.contains('sent'))return; btn.classList.add('sent'); btn.innerHTML='Sent \u2713'; toast('WhatsApp reminder sent.'); }
+function remindAll(){ $all('#feeList .frow .mini').forEach(function(b){ if(!b.classList.contains('sent')){ b.classList.add('sent'); b.innerHTML='Sent \u2713'; } }); toast('Reminder sent to all 43 pending parents.'); }
+function contactLead(btn){ btn.textContent='Contacted \u2713'; btn.style.background='var(--primary-tint)'; btn.style.color='var(--primary-deep)'; toast('Lead contacted on WhatsApp.'); }
+
+function livePayment(){
+  var st=$('#paidStat'); if(st) st.textContent=(parseInt(st.textContent,10)+1);
+  var feed=$('#feed');
+  if(feed){ var row=document.createElement('div'); row.className='li'; row.style.animation='vin .45s var(--ease)';
+    row.innerHTML='<div class=&quot;ic&quot; style=&quot;background:var(--primary-tint);color:var(--primary)&quot;>\u2713</div><div class=&quot;tx&quot;><b>Riya Kapoor \u00b7 Cl. 6-A paid</b><small>UPI \u00b7 just now</small></div><b style=&quot;font-size:13.5px&quot;>\u20B96,400</b>';
+    feed.insertBefore(row,feed.firstChild);
+  }
+  toast('New payment received \u00b7 Riya Kapoor \u00b7 \u20B96,400');
+}
+
+function restart(){ liveDone=false; goView('s-home'); $all('#schoolTabs .tab').forEach(function(t){t.classList.toggle('on',t.dataset.t==='s-home')}); $('#splash').classList.remove('gone'); setTimeout(function(){ $('#splash').classList.add('gone'); },1500); }
+</script>
+</body>
+</html>
+"></iframe>
+
+  <div id="onboard">
+    <div class="ob-top">
+      <div class="ob-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#fff"/><path d="M9 12l2 2 4-4" stroke="#0A5A41" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>EduShield</div>
+      <button class="ob-skip" onclick="goLauncher()">Skip</button>
+    </div>
+    <div class="vp"><div class="track" id="track"><div class="slide"><svg class="illus" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" fill="rgba(255,255,255,.05)"/><circle cx="100" cy="100" r="64" fill="rgba(255,255,255,.06)"/><path d="M100 46l44 15v33c0 29-19 50-44 60-25-10-44-31-44-60V61l44-15z" fill="#fff"/><path d="M76 102l15 15 33-35" stroke="#0E7A59" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M100 30l30 11-30 11-30-11z" fill="#E0A93B"/><path d="M118 47v9c0 4-8 7-18 7s-18-3-18-7v-9" stroke="#E0A93B" stroke-width="5" stroke-linecap="round"/></svg><h2>Education that never stops</h2><p>If a parent is lost, the child’s schooling stays funded — all the way to Class 12.</p></div>
+<div class="slide"><svg class="illus" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" fill="rgba(255,255,255,.05)"/><rect x="46" y="84" width="108" height="74" rx="8" fill="#fff"/><path d="M100 44l60 40H40z" fill="#EDEFEA"/><path d="M100 44l60 40h-60z" fill="#fff"/><rect x="64" y="104" width="20" height="20" rx="4" fill="#0E7A59"/><rect x="116" y="104" width="20" height="20" rx="4" fill="#0E7A59"/><rect x="90" y="132" width="20" height="26" rx="3" fill="#C98A1E"/><circle cx="148" cy="64" r="22" fill="#E0A93B"/><path d="M139 64l6 6 11-12" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><h2>Schools paid 100%, by the 15th</h2><p>EduShield carries the collection risk. Your fees arrive in full, on time, every month.</p></div>
+<div class="slide"><svg class="illus" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" fill="rgba(255,255,255,.05)"/><rect x="62" y="34" width="76" height="132" rx="14" fill="#fff"/><rect x="72" y="52" width="56" height="84" rx="8" fill="#0E7A59"/><circle cx="100" cy="150" r="6" fill="#D7DCD7"/><text x="100" y="104" font-family="-apple-system,sans-serif" font-size="42" font-weight="800" fill="#fff" text-anchor="middle">&#8377;</text><circle cx="140" cy="58" r="20" fill="#E0A93B"/><path d="M133 58l5 5 9-10" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg><h2>One app for the whole journey</h2><p>Fees, reminders, protection, store and admissions — in a single, simple place.</p></div>
+<div class="slide"><svg class="illus" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" fill="rgba(255,255,255,.05)"/><path d="M100 150c-30-20-46-36-46-58a26 26 0 0 1 46-16 26 26 0 0 1 46 16c0 22-16 38-46 58z" fill="#E0A93B"/><path d="M100 150c-30-20-46-36-46-58a26 26 0 0 1 46-16v74z" fill="#C98A1E"/><path d="M40 128c10 8 22 12 30 12M160 128c-10 8-22 12-30 12" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M44 150c8-10 18-12 28-10M156 150c-8-10-18-12-28-10" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg><h2>Sponsors fund real futures</h2><p>Companies and alumni back deserving students through their school, fully tracked.</p></div>
+<div class="slide"><svg class="illus" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" fill="rgba(255,255,255,.05)"/><path d="M100 150c-22-9-36-25-36-48V72l36-12 36 12v30c0 23-14 39-36 48z" fill="#fff" opacity=".25"/><circle cx="100" cy="86" r="16" fill="#fff"/><path d="M74 128c0-15 12-24 26-24s26 9 26 24z" fill="#fff"/><circle cx="58" cy="98" r="12" fill="#E0A93B"/><path d="M40 132c0-11 8-18 18-18s18 7 18 18z" fill="#E0A93B"/><circle cx="142" cy="98" r="12" fill="#E0A93B"/><path d="M124 132c0-11 8-18 18-18s18 7 18 18z" fill="#E0A93B"/></svg><h2>Built for India’s schools & families</h2><p>CBSE & ICSE ready. UPI-first. Partner-backed lending and protection you can trust.</p></div>
+</div></div>
+    <div class="ob-bot">
+      <div class="dots" id="dots"><span class="dot2 on"></span><span class="dot2"></span><span class="dot2"></span><span class="dot2"></span><span class="dot2"></span></div>
+      <button class="ob-next" id="obNext" onclick="nextSlide()">Next</button>
+    </div>
+  </div>
+
+  <div id="launcher" class="off">
+    <div class="glow"></div>
+    <div class="wrap">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#fff"/><path d="M9 12l2 2 4-4" stroke="#0A5A41" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h1>EduShield</h1>
+        <p>Choose a view to explore the demo.</p>
+      </div>
+      <div class="cards">
+        <div class="appcard" onclick="open_('s')">
+          <div class="ic s">🏫</div>
+          <div class="tx"><b>School Console</b><span>Fee assurance · settlement · sponsorship</span></div>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="appcard a2" onclick="open_('p')">
+          <div class="ic p">📱</div>
+          <div class="tx"><b>Parent App</b><span>Pay fees · protection · school store</span></div>
+          <div class="arr"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="hint">Runs right here — nothing to install.</div>
+      <div class="foot">Early prototype · for demo purposes only</div>
+    </div>
+  </div>
+</div>
+<script>
+function $(i){return document.getElementById(i)}
+var ob=0, total=5;
+function render(){ $('track').style.transform='translateX(-'+(ob*100)+'%)'; var d=$('dots').children; for(var i=0;i<d.length;i++)d[i].className='dot2'+(i===ob?' on':''); $('obNext').textContent=(ob===total-1)?'Explore the demo':'Next'; }
+function nextSlide(){ if(ob<total-1){ ob++; render(); } else { goLauncher(); } }
+function goLauncher(){ $('onboard').classList.add('off'); $('launcher').classList.remove('off'); }
+function open_(k){ $('launcher').classList.add('off'); $('topbar').classList.add('on'); if(k==='p'){ $('frP').classList.add('on'); $('frS').classList.remove('on'); $('tt').textContent='Parent App'; } else { $('frS').classList.add('on'); $('frP').classList.remove('on'); $('tt').textContent='School Console'; } }
+function home(){ $('topbar').classList.remove('on'); $('frP').classList.remove('on'); $('frS').classList.remove('on'); $('launcher').classList.remove('off'); }
+/* swipe */
+var sx=null; var vp=document.querySelector('.vp');
+vp.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+vp.addEventListener('touchend',function(e){ if(sx===null)return; var dx=e.changedTouches[0].clientX-sx; if(dx<-40&&ob<total-1){ob++;render();} else if(dx>40&&ob>0){ob--;render();} sx=null; },{passive:true});
+render();
 </script>
 </body>
 </html>
